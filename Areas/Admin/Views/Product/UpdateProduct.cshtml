@@ -1,0 +1,303 @@
+﻿@model FoodMart.Dtos.ProductDtos.UpdateProductDto
+
+@{
+    ViewData["Title"] = "Ürün Güncelle";
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Ürün Güncelle</h1>
+        <p>Ürün bilgilerini, fiyatını, stok durumunu ve yayın ayarlarını düzenleyin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Product"
+       asp-action="Index"
+       class="admin-btn admin-btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        Ürünlere Dön
+    </a>
+
+</div>
+
+<form method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="product-form-grid">
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+
+                    <div>
+                        <h3>Ürün Bilgileri</h3>
+                        <p>Ürünün temel bilgilerini güncelleyin.</p>
+                    </div>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="Name">Ürün Adı</label>
+
+                    <div class="admin-input-wrapper">
+                        <i class="bi bi-box"></i>
+
+                        <input asp-for="Name"
+                               class="admin-form-control"
+                               placeholder="Ürün adı" />
+                    </div>
+
+                    <span asp-validation-for="Name"
+                          class="admin-validation"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="CategoryId">Kategori</label>
+
+                    <div class="admin-select-wrapper">
+
+                        <i class="bi bi-tags"></i>
+
+                        <select asp-for="CategoryId"
+                                asp-items="ViewBag.Categories"
+                                class="admin-form-select">
+
+                            <option value="">Kategori seçiniz</option>
+
+                        </select>
+
+                        <i class="bi bi-chevron-down select-arrow"></i>
+
+                    </div>
+
+                    <span asp-validation-for="CategoryId"
+                          class="admin-validation"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="Description">
+                        Ürün Açıklaması
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="admin-form-textarea"
+                              rows="6"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="admin-validation"></span>
+
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+
+                    <div>
+                        <h3>Fiyat & Stok</h3>
+                        <p>Satış fiyatlarını ve mevcut stok miktarını düzenleyin.</p>
+                    </div>
+
+                </div>
+
+                <div class="product-input-row">
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="Price">
+                            Normal Fiyat
+                        </label>
+
+                        <div class="admin-input-wrapper">
+                            <span class="input-prefix">₺</span>
+
+                            <input asp-for="Price"
+                                   class="admin-form-control" />
+                        </div>
+
+                    </div>
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="DiscountPrice">
+                            İndirimli Fiyat
+                        </label>
+
+                        <div class="admin-input-wrapper">
+                            <span class="input-prefix">₺</span>
+
+                            <input asp-for="DiscountPrice"
+                                   class="admin-form-control" />
+                        </div>
+
+                        <span class="admin-form-hint">
+                            İndirim yoksa boş bırakabilirsiniz.
+                        </span>
+
+                    </div>
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="Stock">Stok</label>
+
+                        <div class="admin-input-wrapper">
+                            <i class="bi bi-boxes"></i>
+
+                            <input asp-for="Stock"
+                                   class="admin-form-control" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-image"></i>
+                    </div>
+
+                    <div>
+                        <h3>Ürün Görseli</h3>
+                        <p>Mevcut ürün görselini görüntüleyin veya değiştirin.</p>
+                    </div>
+
+                </div>
+
+                <div class="product-image-preview"
+                     id="productImagePreview">
+
+                    <div class="image-preview-placeholder">
+                        <i class="bi bi-image"></i>
+                        <span>Görsel Önizleme</span>
+                    </div>
+
+                    <img id="productPreviewImage"
+                         src="@Model.ImageUrl"
+                         alt="@Model.Name"
+                         style="@(string.IsNullOrWhiteSpace(Model.ImageUrl) ? "display:none;" : "display:block;")" />
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl">
+                        Görsel URL
+                    </label>
+
+                    <div class="admin-input-wrapper">
+
+                        <i class="bi bi-link-45deg"></i>
+
+                        <input asp-for="ImageUrl"
+                               id="productImageUrl"
+                               class="admin-form-control" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-sliders"></i>
+                    </div>
+
+                    <div>
+                        <h3>Yayın Ayarları</h3>
+                        <p>Ürünün mağazadaki durumunu yönetin.</p>
+                    </div>
+
+                </div>
+
+                <label class="admin-switch-row">
+
+                    <div>
+                        <strong>Aktif Ürün</strong>
+                        <span>Ürün mağazada görüntülenebilir.</span>
+                    </div>
+
+                    <div class="admin-switch">
+                        <input asp-for="IsActive"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </div>
+
+                </label>
+
+                <label class="admin-switch-row">
+
+                    <div>
+                        <strong>Öne Çıkar</strong>
+                        <span>Ürünü öne çıkan ürün olarak işaretle.</span>
+                    </div>
+
+                    <div class="admin-switch">
+                        <input asp-for="IsFeatured"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </div>
+
+                </label>
+
+            </div>
+
+            <div class="product-form-actions">
+
+                <a asp-area="Admin"
+                   asp-controller="Product"
+                   asp-action="Index"
+                   class="admin-btn admin-btn-secondary">
+
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="admin-btn admin-btn-primary">
+
+                    <i class="bi bi-check-lg"></i>
+                    Değişiklikleri Kaydet
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

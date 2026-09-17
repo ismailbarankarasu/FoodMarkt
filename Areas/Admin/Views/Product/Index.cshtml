@@ -1,0 +1,338 @@
+﻿@model List<FoodMart.Dtos.ProductDtos.ResultProductDto>
+
+@{
+    ViewData["Title"] = "Ürünler";
+
+    var activeProducts = Model.Count(x => x.IsActive);
+    var outOfStockProducts = Model.Count(x => x.Stock <= 0);
+    var featuredProducts = Model.Count(x => x.IsFeatured);
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Ürünler</h1>
+        <p>FoodMart ürün kataloğunu, fiyatları ve stok durumunu yönetin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Product"
+       asp-action="CreateProduct"
+       class="admin-btn admin-btn-primary">
+
+        <i class="bi bi-plus-lg"></i>
+        Yeni Ürün
+    </a>
+
+</div>
+
+<div class="product-summary-grid">
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon green">
+            <i class="bi bi-box-seam"></i>
+        </div>
+
+        <div>
+            <span>Toplam Ürün</span>
+            <strong>@Model.Count</strong>
+        </div>
+
+    </div>
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon blue">
+            <i class="bi bi-check-circle"></i>
+        </div>
+
+        <div>
+            <span>Aktif Ürün</span>
+            <strong>@activeProducts</strong>
+        </div>
+
+    </div>
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon orange">
+            <i class="bi bi-star"></i>
+        </div>
+
+        <div>
+            <span>Öne Çıkan</span>
+            <strong>@featuredProducts</strong>
+        </div>
+
+    </div>
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon red">
+            <i class="bi bi-exclamation-triangle"></i>
+        </div>
+
+        <div>
+            <span>Stokta Yok</span>
+            <strong>@outOfStockProducts</strong>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+
+        <div>
+            <h3>Ürün Listesi</h3>
+            <p>MongoDB üzerinde kayıtlı ürünler</p>
+        </div>
+
+        <div class="table-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="productSearch"
+                   placeholder="Ürün ara..." />
+
+        </div>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table"
+                   id="productTable">
+
+                <thead>
+                    <tr>
+                        <th>Ürün</th>
+                        <th>Kategori</th>
+                        <th>Fiyat</th>
+                        <th>Stok</th>
+                        <th>Durum</th>
+                        <th>Öne Çıkan</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="product-table-info">
+
+                                    <div class="product-table-image">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl"
+                                                 alt="@item.Name"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+
+                                            <span class="product-image-fallback"
+                                                  style="display:none;">
+                                                <i class="bi bi-image"></i>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="product-image-fallback">
+                                                <i class="bi bi-image"></i>
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                    <div class="product-table-text">
+
+                                        <strong>@item.Name</strong>
+
+                                        <span>
+                                            @item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="product-category-badge">
+                                    @item.CategoryName
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <div class="product-price">
+
+                                    @if (item.DiscountPrice.HasValue &&
+                                         item.DiscountPrice.Value > 0 &&
+                                         item.DiscountPrice.Value < item.Price)
+                                    {
+                                        <strong>
+                                            ₺@item.DiscountPrice.Value.ToString("N2")
+                                        </strong>
+
+                                        <del>
+                                            ₺@item.Price.ToString("N2")
+                                        </del>
+                                    }
+                                    else
+                                    {
+                                        <strong>
+                                            ₺@item.Price.ToString("N2")
+                                        </strong>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                @if (item.Stock <= 0)
+                                {
+                                    <span class="stock-badge out">
+                                        Stok Yok
+                                    </span>
+                                }
+                                else if (item.Stock <= 10)
+                                {
+                                    <span class="stock-badge low">
+                                        @item.Stock adet
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="stock-badge available">
+                                        @item.Stock adet
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-badge success">
+                                        <i class="bi bi-check-circle"></i>
+                                        Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        <i class="bi bi-dash-circle"></i>
+                                        Pasif
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @if (item.IsFeatured)
+                                {
+                                    <span class="featured-star active">
+                                        <i class="bi bi-star-fill"></i>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="featured-star">
+                                        <i class="bi bi-star"></i>
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Product"
+                                       asp-action="UpdateProduct"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Düzenle">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Product"
+                                          asp-action="DeleteProduct"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="delete-product-form"
+                                          data-product="@item.Name">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="table-action delete"
+                                                title="Sil">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <h3>Henüz ürün bulunmuyor</h3>
+
+            <p>
+                FoodMart ürün kataloğunu oluşturmaya
+                ilk ürününüzü ekleyerek başlayabilirsiniz.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Product"
+               asp-action="CreateProduct"
+               class="admin-btn admin-btn-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                İlk Ürünü Oluştur
+            </a>
+
+        </div>
+    }
+
+</div>

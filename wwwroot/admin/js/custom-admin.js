@@ -248,3 +248,114 @@ if (categorySearch) {
             });
     });
 }
+
+
+const productImageUrl =
+    document.getElementById("productImageUrl");
+
+const productPreviewImage =
+    document.getElementById("productPreviewImage");
+
+const imagePreviewPlaceholder =
+    document.querySelector(".image-preview-placeholder");
+
+if (productImageUrl && productPreviewImage) {
+
+    function updateProductPreview() {
+
+        const imageUrl = productImageUrl.value.trim();
+
+        if (!imageUrl) {
+            productPreviewImage.style.display = "none";
+
+            if (imagePreviewPlaceholder) {
+                imagePreviewPlaceholder.style.display = "flex";
+            }
+
+            return;
+        }
+
+        productPreviewImage.src = imageUrl;
+    }
+
+    productImageUrl.addEventListener(
+        "input",
+        updateProductPreview);
+
+    productPreviewImage.addEventListener(
+        "load",
+        function () {
+
+            this.style.display = "block";
+
+            if (imagePreviewPlaceholder) {
+                imagePreviewPlaceholder.style.display = "none";
+            }
+        });
+
+    productPreviewImage.addEventListener(
+        "error",
+        function () {
+
+            this.style.display = "none";
+
+            if (imagePreviewPlaceholder) {
+                imagePreviewPlaceholder.style.display = "flex";
+            }
+        });
+
+    updateProductPreview();
+}
+
+
+const productSearch = document.getElementById("productSearch");
+
+if (productSearch) {
+
+    productSearch.addEventListener("input", function () {
+
+        const searchValue = this.value
+            .toLocaleLowerCase("tr-TR")
+            .trim();
+
+        document
+            .querySelectorAll("#productTable tbody tr")
+            .forEach(row => {
+
+                const productName =
+                    row.querySelector(".product-table-text strong")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                const categoryName =
+                    row.querySelector(".product-category-badge")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                const isMatch =
+                    productName.includes(searchValue) ||
+                    categoryName.includes(searchValue);
+
+                row.style.display = isMatch ? "" : "none";
+            });
+    });
+}
+
+document
+    .querySelectorAll(".delete-product-form")
+    .forEach(form => {
+
+        form.addEventListener("submit", function (event) {
+
+            const productName =
+                this.dataset.product ?? "bu ürün";
+
+            const confirmed = confirm(
+                `"${productName}" ürününü silmek istediğinize emin misiniz?`
+            );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });
