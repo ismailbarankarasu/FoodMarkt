@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FoodMart.Services.CategoryServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FoodMart.ViewComponents
 {
     public class CategoryComponentPartial : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly ICategoryService _categoryService;
+
+        public CategoryComponentPartial(ICategoryService categoryService)
         {
-            return View();
+            _categoryService = categoryService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var categories = await _categoryService.GetAllAsync();
+
+            return View(categories);
         }
     }
 }
