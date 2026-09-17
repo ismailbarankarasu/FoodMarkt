@@ -10,4 +10,8 @@
     <None Include="ViewComponents\DiscountComponentPartial.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="3.11.2" />
+  </ItemGroup>
+
 </Project>

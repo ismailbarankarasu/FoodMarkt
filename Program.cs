@@ -1,10 +1,38 @@
+using FoodMart.Services.CategoryServices;
+using FoodMart.Settings;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 
+builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
+{
+    var settings = serviceProvider
+        .GetRequiredService<IOptions<MongoDbSettings>>()
+        .Value;
+
+    return new MongoClient(settings.ConnectionString);
+});
+
+builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
+{
+    var settings = serviceProvider
+        .GetRequiredService<IOptions<MongoDbSettings>>()
+        .Value;
+
+    var client = serviceProvider.GetRequiredService<IMongoClient>();
+
+    return client.GetDatabase(settings.DatabaseName);
+});
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
