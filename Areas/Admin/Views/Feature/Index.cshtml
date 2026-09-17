@@ -1,0 +1,225 @@
+﻿@model List<FoodMart.Dtos.FeatureDtos.ResultFeatureDto>
+
+@{
+    ViewData["Title"] = "Slider Yönetimi";
+
+    var activeCount = Model.Count(x => x.IsActive);
+    var passiveCount = Model.Count(x => !x.IsActive);
+}
+
+<div class="page-header">
+    <div class="page-title-area">
+        <h1>Slider Yönetimi</h1>
+        <p>Ana sayfada gösterilecek slider içeriklerini yönetin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Feature"
+       asp-action="CreateFeature"
+       class="admin-btn admin-btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Yeni Slider
+    </a>
+</div>
+
+<div class="product-summary-grid">
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon green">
+            <i class="bi bi-images"></i>
+        </div>
+        <div>
+            <span>Toplam Slider</span>
+            <strong>@Model.Count</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon blue">
+            <i class="bi bi-check-circle"></i>
+        </div>
+        <div>
+            <span>Aktif</span>
+            <strong>@activeCount</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon red">
+            <i class="bi bi-eye-slash"></i>
+        </div>
+        <div>
+            <span>Pasif</span>
+            <strong>@passiveCount</strong>
+        </div>
+    </div>
+
+</div>
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+        <div>
+            <h3>Slider Listesi</h3>
+            <p>Sliderlar gösterim sırasına göre listelenmektedir.</p>
+        </div>
+
+        <div class="table-search">
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="featureSearch"
+                   placeholder="Slider ara..." />
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table" id="featureTable">
+                <thead>
+                    <tr>
+                        <th>Slider</th>
+                        <th>Buton</th>
+                        <th>Sıra</th>
+                        <th>Durum</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="feature-table-info">
+
+                                    <div class="feature-table-image">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl"
+                                                 alt="@item.Title"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+
+                                            <span class="feature-image-fallback"
+                                                  style="display:none;">
+                                                <i class="bi bi-image"></i>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="feature-image-fallback">
+                                                <i class="bi bi-image"></i>
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                    <div class="feature-table-text">
+                                        <strong>@item.Title</strong>
+                                        <span>@item.Description</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="feature-button-info">
+                                    <strong>@item.ButtonText</strong>
+                                    <span>@item.ButtonUrl</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="order-badge">
+                                    @item.Order
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-badge success">
+                                        <i class="bi bi-check-circle"></i>
+                                        Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        <i class="bi bi-dash-circle"></i>
+                                        Pasif
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Feature"
+                                       asp-action="UpdateFeature"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Düzenle">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Feature"
+                                          asp-action="DeleteFeature"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="delete-feature-form"
+                                          data-feature="@item.Title">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="table-action delete"
+                                                title="Sil">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-images"></i>
+            </div>
+
+            <h3>Henüz slider bulunmuyor</h3>
+
+            <p>
+                Ana sayfada göstermek istediğiniz ilk slider
+                içeriğini oluşturabilirsiniz.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Feature"
+               asp-action="CreateFeature"
+               class="admin-btn admin-btn-primary">
+                <i class="bi bi-plus-lg"></i>
+                İlk Sliderı Oluştur
+            </a>
+
+        </div>
+    }
+
+</div>

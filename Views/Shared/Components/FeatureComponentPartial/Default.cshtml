@@ -1,4 +1,5 @@
-﻿<section class="py-3" style="background-image: url('/FoodMart-1.0.0/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
+﻿@model List<FoodMart.Dtos.FeatureDtos.ResultFeatureDto>
+<section class="py-3" style="background-image: url('/FoodMart-1.0.0/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -8,54 +9,95 @@
                     <div class="banner-ad large bg-info block-1">
 
                         <div class="swiper main-swiper">
+
                             <div class="swiper-wrapper">
 
-                                <div class="swiper-slide">
-                                    <div class="row banner-content p-5">
-                                        <div class="content-wrapper col-md-7">
-                                            <div class="categories my-3">100% natural</div>
-                                            <h3 class="display-4">Fresh Smoothie & Summer Juice</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                                            <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Shop Now</a>
-                                        </div>
-                                        <div class="img-wrapper col-md-5">
-                                            <img src="~/FoodMart-1.0.0/images/product-thumb-1.png" class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
+                                @if (Model.Any())
+                                {
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="swiper-slide">
 
-                                <div class="swiper-slide">
-                                    <div class="row banner-content p-5">
-                                        <div class="content-wrapper col-md-7">
-                                            <div class="categories mb-3 pb-3">100% natural</div>
-                                            <h3 class="banner-title">Fresh Smoothie & Summer Juice</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                                            <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Shop Collection</a>
-                                        </div>
-                                        <div class="img-wrapper col-md-5">
-                                            <img src="~/FoodMart-1.0.0/images/product-thumb-1.png" class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
+                                            <div class="row banner-content p-5">
 
-                                <div class="swiper-slide">
-                                    <div class="row banner-content p-5">
-                                        <div class="content-wrapper col-md-7">
-                                            <div class="categories mb-3 pb-3">100% natural</div>
-                                            <h3 class="banner-title">Heinz Tomato Ketchup</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                                            <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Shop Collection</a>
+                                                <div class="content-wrapper col-md-7">
+
+                                                    <div class="categories my-3">
+                                                        FoodMart
+                                                    </div>
+
+                                                    <h3 class="display-4">
+                                                        @item.Title
+                                                    </h3>
+
+                                                    <p>
+                                                        @item.Description
+                                                    </p>
+
+                                                    @if (!string.IsNullOrWhiteSpace(item.ButtonText))
+                                                    {
+                                                        <a href="@item.ButtonUrl"
+                                                           class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">
+
+                                                            @item.ButtonText
+
+                                                        </a>
+                                                    }
+
+                                                </div>
+
+                                                <div class="img-wrapper col-md-5">
+
+                                                    @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                                    {
+                                                        <img src="@item.ImageUrl"
+                                                             alt="@item.Title"
+                                                             class="img-fluid" />
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
-                                        <div class="img-wrapper col-md-5">
-                                            <img src="~/FoodMart-1.0.0/images/product-thumb-2.png" class="img-fluid">
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="swiper-slide">
+
+                                        <div class="row banner-content p-5">
+
+                                            <div class="content-wrapper col-md-7">
+
+                                                <div class="categories my-3">
+                                                    FoodMarkt
+                                                </div>
+
+                                                <h3 class="display-4">
+                                                    FoodMarkt'a Hoş Geldiniz
+                                                </h3>
+
+                                                <p>
+                                                    Taze ve kaliteli ürünleri keşfedin.
+                                                </p>
+
+                                            </div>
+
                                         </div>
+
                                     </div>
-                                </div>
+                                }
+
                             </div>
 
-                            <div class="swiper-pagination"></div>
+                            @if (Model.Count > 1)
+                            {
+                                <div class="swiper-pagination"></div>
+                            }
 
                         </div>
+
                     </div>
 
                     <div class="banner-ad bg-success-subtle block-2" style="background:url('/FoodMart-1.0.0/images/ad-image-1.png') no-repeat;background-position: right bottom">

@@ -1,0 +1,219 @@
+﻿@model FoodMart.Dtos.FeatureDtos.UpdateFeatureDto
+
+@{
+    ViewData["Title"] = "Yeni Slider";
+}
+
+<div class="page-header">
+    <div class="page-title-area">
+        <h1>Slider Güncelle</h1>
+        <p>Seçilen slider içeriğini ve yayın ayarlarını düzenleyin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Feature"
+       asp-action="Index"
+       class="admin-btn admin-btn-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Sliderlara Dön
+    </a>
+</div>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="product-form-grid">
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+                    <div class="form-header-icon">
+                        <i class="bi bi-card-heading"></i>
+                    </div>
+
+                    <div>
+                        <h3>Slider İçeriği</h3>
+                        <p>Başlık ve açıklama bilgilerini girin.</p>
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Title">Başlık</label>
+
+                    <div class="admin-input-wrapper">
+                        <i class="bi bi-type-h1"></i>
+
+                        <input asp-for="Title"
+                               class="admin-form-control"
+                               placeholder="Örn: Taze Ürünlerde Büyük Fırsat" />
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Description">Açıklama</label>
+
+                    <textarea asp-for="Description"
+                              class="admin-form-textarea"
+                              rows="5"
+                              placeholder="Slider açıklamasını yazın..."></textarea>
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+                    <div class="form-header-icon">
+                        <i class="bi bi-cursor"></i>
+                    </div>
+
+                    <div>
+                        <h3>Buton Ayarları</h3>
+                        <p>Slider üzerindeki aksiyon butonunu yapılandırın.</p>
+                    </div>
+                </div>
+
+                <div class="product-input-row">
+
+                    <div class="admin-form-group">
+                        <label asp-for="ButtonText">Buton Yazısı</label>
+
+                        <div class="admin-input-wrapper">
+                            <i class="bi bi-fonts"></i>
+
+                            <input asp-for="ButtonText"
+                                   class="admin-form-control"
+                                   placeholder="Alışverişe Başla" />
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label asp-for="ButtonUrl">Buton URL</label>
+
+                        <div class="admin-input-wrapper">
+                            <i class="bi bi-link-45deg"></i>
+
+                            <input asp-for="ButtonUrl"
+                                   class="admin-form-control"
+                                   placeholder="/Product" />
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label asp-for="Order">Gösterim Sırası</label>
+
+                        <div class="admin-input-wrapper">
+                            <i class="bi bi-list-ol"></i>
+
+                            <input asp-for="Order"
+                                   class="admin-form-control"
+                                   min="1"
+                                   placeholder="1" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+                    <div class="form-header-icon">
+                        <i class="bi bi-image"></i>
+                    </div>
+
+                    <div>
+                        <h3>Slider Görseli</h3>
+                        <p>Slider için kullanılacak görseli belirleyin.</p>
+                    </div>
+                </div>
+
+                <div class="feature-preview">
+
+                    <div class="feature-preview-placeholder">
+                        <i class="bi bi-images"></i>
+                        <span>Slider Önizleme</span>
+                    </div>
+
+                    <img id="featurePreviewImage"
+                         src="@Model.ImageUrl"
+                         alt="@Model.Title"
+                         style="@(string.IsNullOrWhiteSpace(Model.ImageUrl) ? "display:none;" : "display:block;")" />
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl">Görsel URL</label>
+
+                    <div class="admin-input-wrapper">
+                        <i class="bi bi-link-45deg"></i>
+
+                        <input asp-for="ImageUrl"
+                               id="featureImageUrl"
+                               class="admin-form-control"
+                               placeholder="/images/banner-1.jpg" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+                    <div class="form-header-icon">
+                        <i class="bi bi-eye"></i>
+                    </div>
+
+                    <div>
+                        <h3>Yayın Durumu</h3>
+                        <p>Sliderın ana sayfada görüntülenmesini yönetin.</p>
+                    </div>
+                </div>
+
+                <label class="admin-switch-row">
+
+                    <div>
+                        <strong>Aktif Slider</strong>
+                        <span>Ana sayfada gösterilsin.</span>
+                    </div>
+
+                    <div class="admin-switch">
+                        <input asp-for="IsActive" type="checkbox" />
+                        <span class="switch-slider"></span>
+                    </div>
+
+                </label>
+
+            </div>
+
+            <div class="product-form-actions">
+
+                <a asp-area="Admin"
+                   asp-controller="Feature"
+                   asp-action="Index"
+                   class="admin-btn admin-btn-secondary">
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="admin-btn admin-btn-primary">
+                    <i class="bi bi-check-lg"></i>
+                    Değişiklikleri Kaydet
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <input type="hidden" asp-for="Id" />
+</form>

@@ -359,3 +359,102 @@ document
             }
         });
     });
+
+
+const featureSearch = document.getElementById("featureSearch");
+
+if (featureSearch) {
+    featureSearch.addEventListener("input", function () {
+
+        const searchValue = this.value
+            .toLocaleLowerCase("tr-TR")
+            .trim();
+
+        document
+            .querySelectorAll("#featureTable tbody tr")
+            .forEach(row => {
+
+                const title =
+                    row.querySelector(".feature-table-text strong")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                row.style.display =
+                    title.includes(searchValue) ? "" : "none";
+            });
+    });
+}
+
+
+const featureImageUrl =
+    document.getElementById("featureImageUrl");
+
+const featurePreviewImage =
+    document.getElementById("featurePreviewImage");
+
+const featurePreviewPlaceholder =
+    document.querySelector(".feature-preview-placeholder");
+
+if (featureImageUrl && featurePreviewImage) {
+
+    function updateFeaturePreview() {
+
+        const imageUrl = featureImageUrl.value.trim();
+
+        if (!imageUrl) {
+            featurePreviewImage.style.display = "none";
+
+            if (featurePreviewPlaceholder) {
+                featurePreviewPlaceholder.style.display = "flex";
+            }
+
+            return;
+        }
+
+        featurePreviewImage.src = imageUrl;
+    }
+
+    featurePreviewImage.addEventListener("load", function () {
+
+        this.style.display = "block";
+
+        if (featurePreviewPlaceholder) {
+            featurePreviewPlaceholder.style.display = "none";
+        }
+    });
+
+    featurePreviewImage.addEventListener("error", function () {
+
+        this.style.display = "none";
+
+        if (featurePreviewPlaceholder) {
+            featurePreviewPlaceholder.style.display = "flex";
+        }
+    });
+
+    featureImageUrl.addEventListener(
+        "input",
+        updateFeaturePreview);
+
+    updateFeaturePreview();
+}
+
+
+document
+    .querySelectorAll(".delete-feature-form")
+    .forEach(form => {
+
+        form.addEventListener("submit", function (event) {
+
+            const featureName =
+                this.dataset.feature ?? "bu slider";
+
+            const confirmed = confirm(
+                `"${featureName}" sliderını silmek istediğinize emin misiniz?`
+            );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });

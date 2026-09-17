@@ -1,4 +1,5 @@
 using FoodMart.Services.CategoryServices;
+using FoodMart.Services.FeatureServices;
 using FoodMart.Services.ProductServices;
 using FoodMart.Settings;
 using Microsoft.Extensions.Options;
@@ -30,6 +31,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
     return client.GetDatabase(settings.DatabaseName);
 });
+builder.Services.AddScoped<IFeatureService, FeatureService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 

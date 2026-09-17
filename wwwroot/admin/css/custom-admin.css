@@ -2012,3 +2012,131 @@ input {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==============================
+   FEATURE / SLIDER
+================================ */
+
+.feature-table-info {
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feature-table-image {
+    width: 78px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #f5f8f5;
+    border: 1px solid #edf0ed;
+    border-radius: 9px;
+}
+
+    .feature-table-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.feature-image-fallback {
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: #a0a8a3;
+}
+
+.feature-table-text {
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .feature-table-text strong {
+        color: #38413b;
+        font-size: 10px;
+    }
+
+    .feature-table-text span {
+        margin-top: 4px;
+        overflow: hidden;
+        color: #929b95;
+        font-size: 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+.feature-button-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .feature-button-info strong {
+        color: #48524b;
+        font-size: 9px;
+    }
+
+    .feature-button-info span {
+        margin-top: 3px;
+        color: #9aa29d;
+        font-size: 8px;
+    }
+
+.order-badge {
+    width: 29px;
+    height: 29px;
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    background: var(--primary-light);
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.delete-feature-form {
+    margin: 0;
+}
+
+    .delete-feature-form button {
+        border: 0;
+        cursor: pointer;
+    }
+
+.feature-preview {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    overflow: hidden;
+    background: #f7f9f7;
+    border: 1px dashed #d7ded8;
+    border-radius: 13px;
+}
+
+    .feature-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.feature-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #a0aaa3;
+}
+
+    .feature-preview-placeholder i {
+        font-size: 28px;
+    }
+
+    .feature-preview-placeholder span {
+        font-size: 8px;
+    }
