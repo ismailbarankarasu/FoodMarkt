@@ -40,5 +40,30 @@ namespace FoodMart.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateCategory(string id)
+        {
+            var value = await _categoryService.GetByIdAsync(id);
+
+            if (value is null)
+                return NotFound();
+
+            var updateCategoryDto = new UpdateCategoryDto
+            {
+                Id = value.Id,
+                Name = value.Name,
+                Icon = value.Icon
+            };
+
+            return View(updateCategoryDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        {
+            await _categoryService.UpdateAsync(updateCategoryDto);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

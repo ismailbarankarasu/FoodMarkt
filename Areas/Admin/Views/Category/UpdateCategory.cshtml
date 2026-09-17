@@ -1,14 +1,14 @@
-﻿@model FoodMart.Dtos.CategoryDtos.CreateCategoryDto
+﻿@model FoodMart.Dtos.CategoryDtos.UpdateCategoryDto
 
 @{
-    ViewData["Title"] = "Yeni Kategori";
+    ViewData["Title"] = "Kategori Güncelle";
 }
 
 <div class="page-header">
 
     <div class="page-title-area">
-        <h1>Yeni Kategori</h1>
-        <p>FoodMart mağazanız için yeni bir ürün kategorisi oluşturun.</p>
+        <h1>Kategori Güncelle</h1>
+        <p>Seçilen kategorinin bilgilerini düzenleyebilirsiniz.</p>
     </div>
 
     <a asp-area="Admin"
@@ -31,18 +31,20 @@
         <div class="form-card-header">
 
             <div class="form-header-icon">
-                <i class="bi bi-plus-lg"></i>
+                <i class="bi bi-pencil-square"></i>
             </div>
 
             <div>
                 <h3>Kategori Bilgileri</h3>
-                <p>Yeni kategorinin temel bilgilerini girin.</p>
+                <p>Kategori adı ve ikon bilgisini güncelleyin.</p>
             </div>
 
         </div>
 
 
         <form method="post">
+
+            <input type="hidden" asp-for="Id" />
 
             <div class="admin-form-group">
 
@@ -80,7 +82,7 @@
                 </div>
 
                 <span class="admin-form-hint">
-                    Temadaki kategori ikon sınıfını girebilirsiniz.
+                    Ana sayfadaki kategori kartında kullanılacak ikon sınıfını girin.
                 </span>
 
             </div>
@@ -100,8 +102,8 @@
                 <button type="submit"
                         class="admin-btn admin-btn-primary">
 
-                    <i class="bi bi-plus-lg"></i>
-                    Kategori Oluştur
+                    <i class="bi bi-check-lg"></i>
+                    Değişiklikleri Kaydet
 
                 </button>
 
@@ -118,23 +120,28 @@
             <i class="bi bi-lightbulb"></i>
         </div>
 
-        <h3>Küçük bir ipucu</h3>
+        <h3>Kategori Yönetimi</h3>
 
         <p>
-            Kategoriler, ziyaretçilerin ürünlere daha hızlı
-            ulaşmasını sağlar.
+            Kategori bilgilerinde yaptığınız değişiklikler
+            FoodMart mağazasında kullanılacaktır.
         </p>
 
         <div class="info-list">
 
             <div>
                 <i class="bi bi-check-circle-fill"></i>
-                <span>Kısa ve anlaşılır kategori adları kullanın.</span>
+                <span>Açıklayıcı bir kategori adı kullanın.</span>
             </div>
 
             <div>
                 <i class="bi bi-check-circle-fill"></i>
-                <span>Kategoriyi temsil eden uygun bir ikon seçin.</span>
+                <span>Kategoriye uygun bir ikon seçin.</span>
+            </div>
+
+            <div>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Değişiklikleri kaydetmeden önce kontrol edin.</span>
             </div>
 
         </div>

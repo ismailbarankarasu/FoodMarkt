@@ -220,3 +220,31 @@ document.addEventListener(
     "DOMContentLoaded",
     initializeDashboardCharts
 );
+
+
+const categorySearch = document.getElementById("categorySearch");
+
+if (categorySearch) {
+
+    categorySearch.addEventListener("input", function () {
+
+        const searchValue = this.value
+            .toLocaleLowerCase("tr-TR")
+            .trim();
+
+        document
+            .querySelectorAll("#categoryTable tbody tr")
+            .forEach(row => {
+
+                const categoryName = row
+                    .querySelector(".category-table-name strong")
+                    ?.textContent
+                    .toLocaleLowerCase("tr-TR") ?? "";
+
+                row.style.display =
+                    categoryName.includes(searchValue)
+                        ? ""
+                        : "none";
+            });
+    });
+}

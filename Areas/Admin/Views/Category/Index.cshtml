@@ -1,29 +1,176 @@
 ﻿@model List<FoodMart.Dtos.CategoryDtos.ResultCategoryDto>
 
+@{
+    ViewData["Title"] = "Kategoriler";
+}
 
-<h2>Kategoriler</h2>
+<div class="page-header">
 
-<a href="/Category/CreateCategory">Yeni Kategori Ekle</a>
+    <div class="page-title-area">
+        <h1>Kategoriler</h1>
+        <p>Mağazanızdaki ürün kategorilerini görüntüleyin ve yönetin.</p>
+    </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Kategori</th>
-            <th>Icon</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
+    <a asp-area="Admin"
+       asp-controller="Category"
+       asp-action="CreateCategory"
+       class="admin-btn admin-btn-primary">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.Icon</td>
-                <td><a href="/Category/DeleteCategory/@item.Id">Sil</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <i class="bi bi-plus-lg"></i>
+        Yeni Kategori
+
+    </a>
+
+</div>
+
+
+<div class="category-summary">
+
+    <div class="category-summary-icon">
+        <i class="bi bi-tags"></i>
+    </div>
+
+    <div>
+        <span>Toplam Kategori</span>
+        <strong>@Model.Count</strong>
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+
+        <div>
+            <h3>Kategori Listesi</h3>
+            <p>MongoDB üzerinde kayıtlı tüm kategoriler</p>
+        </div>
+
+        <div class="table-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="categorySearch"
+                   placeholder="Kategori ara..." />
+
+        </div>
+
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table" id="categoryTable">
+
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>MongoDB ID</th>
+                        <th>İkon</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <div class="category-table-name">
+
+                                    <div class="category-table-icon">
+                                        <i class="bi bi-tag-fill"></i>
+                                    </div>
+
+                                    <strong>@item.Name</strong>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <code class="mongo-id">
+                                    @item.Id
+                                </code>
+                            </td>
+
+                            <td>
+                                <span class="icon-code">
+                                    @item.Icon
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="UpdateCategory"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Düzenle">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="DeleteCategory"
+                                       asp-route-id="@item.Id"
+                                       class="table-action delete delete-category"
+                                       data-category="@item.Name"
+                                       title="Sil">
+
+                                        <i class="bi bi-trash3"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-tags"></i>
+            </div>
+
+            <h3>Henüz kategori bulunmuyor</h3>
+
+            <p>
+                İlk kategorinizi oluşturarak ürünlerinizi
+                düzenlemeye başlayabilirsiniz.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Category"
+               asp-action="CreateCategory"
+               class="admin-btn admin-btn-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                İlk Kategoriyi Oluştur
+
+            </a>
+
+        </div>
+    }
+
+</div>
