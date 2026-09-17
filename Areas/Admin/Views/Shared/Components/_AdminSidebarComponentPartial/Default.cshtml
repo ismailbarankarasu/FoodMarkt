@@ -1,0 +1,140 @@
+﻿<aside class="admin-sidebar" id="adminSidebar">
+
+    <div class="sidebar-brand">
+
+        <a asp-area="Admin"
+           asp-controller="Dashboard"
+           asp-action="Index"
+           class="brand-link">
+
+            <div class="brand-icon">
+                <i class="bi bi-basket2-fill"></i>
+            </div>
+
+            <div class="brand-text">
+                <span class="brand-name">FoodMarkt</span>
+                <span class="brand-subtitle">Yönetim Paneli</span>
+            </div>
+
+        </a>
+
+        <button class="sidebar-close" id="sidebarClose" type="button">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+    </div>
+
+
+    <div class="sidebar-menu">
+
+        <span class="menu-label">GENEL</span>
+
+        <a asp-area="Admin"
+           asp-controller="Dashboard"
+           asp-action="Index"
+           class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-grid-1x2-fill"></i>
+            </span>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <span class="menu-label">MAĞAZA YÖNETİMİ</span>
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Index"
+           class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-tags-fill"></i>
+            </span>
+
+            <span>Kategoriler</span>
+
+        </a>
+
+
+        <a href="#" class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-box-seam-fill"></i>
+            </span>
+
+            <span>Ürünler</span>
+
+        </a>
+
+
+        <a href="#" class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-images"></i>
+            </span>
+
+            <span>Slider Yönetimi</span>
+
+        </a>
+
+
+        <a href="#" class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-percent"></i>
+            </span>
+
+            <span>İndirimler</span>
+
+        </a>
+
+
+        <span class="menu-label">SATIŞ & PAZARLAMA</span>
+
+        <a href="#" class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-receipt"></i>
+            </span>
+
+            <span>Satışlar</span>
+
+        </a>
+
+
+        <a href="#" class="sidebar-link">
+
+            <span class="sidebar-link-icon">
+                <i class="bi bi-envelope-heart-fill"></i>
+            </span>
+
+            <span>Aboneler</span>
+
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-footer">
+
+        <a asp-area=""
+           asp-controller="Default"
+           asp-action="Index"
+           class="back-to-site">
+
+            <i class="bi bi-arrow-left"></i>
+
+            <span>Siteye Dön</span>
+
+        </a>
+
+        <div class="sidebar-version">
+            FoodMarkt Admin v1.0
+        </div>
+
+    </div>
+
+</aside>

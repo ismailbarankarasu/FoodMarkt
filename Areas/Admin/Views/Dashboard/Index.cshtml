@@ -1,0 +1,474 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <div class="page-title-area">
+        <h1>Dashboard</h1>
+        <p>FoodMart mağazanızın performansını ve güncel durumunu buradan takip edebilirsiniz.</p>
+    </div>
+
+    <div class="dashboard-date-badge">
+        <i class="bi bi-calendar-check"></i>
+        <span>@DateTime.Now.ToString("dd MMMM yyyy")</span>
+    </div>
+</div>
+
+<!-- KPI CARDS -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-card-top">
+            <div class="stat-icon stat-icon-green">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <span class="stat-change positive">
+                <i class="bi bi-arrow-up-short"></i>
+                %12.5
+            </span>
+        </div>
+
+        <div class="stat-content">
+            <span class="stat-label">Toplam Ürün</span>
+            <h3>128</h3>
+            <p>Geçen aya göre <strong>14 yeni ürün</strong></p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-top">
+            <div class="stat-icon stat-icon-blue">
+                <i class="bi bi-bag-check"></i>
+            </div>
+
+            <span class="stat-change positive">
+                <i class="bi bi-arrow-up-short"></i>
+                %8.2
+            </span>
+        </div>
+
+        <div class="stat-content">
+            <span class="stat-label">Toplam Satış</span>
+            <h3>1.248</h3>
+            <p>Bu ay <strong>186 satış</strong> gerçekleşti</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-top">
+            <div class="stat-icon stat-icon-orange">
+                <i class="bi bi-currency-dollar"></i>
+            </div>
+
+            <span class="stat-change positive">
+                <i class="bi bi-arrow-up-short"></i>
+                %18.4
+            </span>
+        </div>
+
+        <div class="stat-content">
+            <span class="stat-label">Toplam Gelir</span>
+            <h3>₺84.250</h3>
+            <p>Bu ay <strong>₺12.430 artış</strong></p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-top">
+            <div class="stat-icon stat-icon-purple">
+                <i class="bi bi-envelope-heart"></i>
+            </div>
+
+            <span class="stat-change positive">
+                <i class="bi bi-arrow-up-short"></i>
+                %5.7
+            </span>
+        </div>
+
+        <div class="stat-content">
+            <span class="stat-label">Bülten Abonesi</span>
+            <h3>2.841</h3>
+            <p>Son 7 günde <strong>+63 yeni abone</strong></p>
+        </div>
+    </div>
+
+</div>
+
+<!-- CHARTS -->
+<div class="dashboard-chart-grid">
+
+    <div class="admin-card dashboard-chart-card">
+
+        <div class="card-heading">
+            <div>
+                <h3>Satış Performansı</h3>
+                <p>Son 7 günlük satış ve gelir hareketleri</p>
+            </div>
+
+            <div class="chart-legend-custom">
+                <span>
+                    <i class="legend-dot sales-dot"></i>
+                    Satış
+                </span>
+
+                <span>
+                    <i class="legend-dot revenue-dot"></i>
+                    Gelir
+                </span>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="salesChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <div class="admin-card dashboard-chart-card">
+
+        <div class="card-heading">
+            <div>
+                <h3>Kategori Dağılımı</h3>
+                <p>Satışların kategori bazlı dağılımı</p>
+            </div>
+
+            <button class="card-more-button">
+                <i class="bi bi-three-dots"></i>
+            </button>
+        </div>
+
+        <div class="donut-container">
+            <canvas id="categoryChart"></canvas>
+
+            <div class="donut-center">
+                <strong>1.248</strong>
+                <span>Satış</span>
+            </div>
+        </div>
+
+        <div class="category-chart-legend">
+            <div>
+                <span class="category-color category-one"></span>
+                Meyve & Sebze
+                <strong>%38</strong>
+            </div>
+
+            <div>
+                <span class="category-color category-two"></span>
+                İçecekler
+                <strong>%27</strong>
+            </div>
+
+            <div>
+                <span class="category-color category-three"></span>
+                Atıştırmalık
+                <strong>%21</strong>
+            </div>
+
+            <div>
+                <span class="category-color category-four"></span>
+                Diğer
+                <strong>%14</strong>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TABLE + POPULAR PRODUCTS -->
+<div class="dashboard-bottom-grid">
+
+    <div class="admin-card">
+
+        <div class="card-heading table-heading">
+            <div>
+                <h3>Son Satışlar</h3>
+                <p>Gerçekleştirilen son satış işlemleri</p>
+            </div>
+
+            <a href="#" class="view-all-link">
+                Tümünü Gör
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Ürün</th>
+                        <th>Müşteri</th>
+                        <th>Tarih</th>
+                        <th>Tutar</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <div class="table-product">
+                                <div class="table-product-icon">
+                                    <i class="bi bi-basket"></i>
+                                </div>
+                                <div>
+                                    <strong>Organik Avokado</strong>
+                                    <span>#FM-10248</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>Ahmet Yılmaz</td>
+                        <td>Bugün, 10:42</td>
+                        <td><strong>₺249,90</strong></td>
+
+                        <td>
+                            <span class="status-badge success">
+                                Tamamlandı
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="table-product">
+                                <div class="table-product-icon">
+                                    <i class="bi bi-cup-straw"></i>
+                                </div>
+                                <div>
+                                    <strong>Portakal Suyu</strong>
+                                    <span>#FM-10247</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>Selin Kaya</td>
+                        <td>Bugün, 09:18</td>
+                        <td><strong>₺119,50</strong></td>
+
+                        <td>
+                            <span class="status-badge pending">
+                                Bekliyor
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="table-product">
+                                <div class="table-product-icon">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                                <div>
+                                    <strong>Granola Paketi</strong>
+                                    <span>#FM-10246</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>Mehmet Demir</td>
+                        <td>Dün, 18:36</td>
+                        <td><strong>₺184,75</strong></td>
+
+                        <td>
+                            <span class="status-badge success">
+                                Tamamlandı
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="table-product">
+                                <div class="table-product-icon">
+                                    <i class="bi bi-basket2"></i>
+                                </div>
+                                <div>
+                                    <strong>Taze Sebze Paketi</strong>
+                                    <span>#FM-10245</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>Elif Aydın</td>
+                        <td>Dün, 16:12</td>
+                        <td><strong>₺326,20</strong></td>
+
+                        <td>
+                            <span class="status-badge success">
+                                Tamamlandı
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="admin-card popular-card">
+
+        <div class="card-heading">
+            <div>
+                <h3>Çok Satan Ürünler</h3>
+                <p>En yüksek satış adedine sahip ürünler</p>
+            </div>
+        </div>
+
+        <div class="popular-product-list">
+
+            <div class="popular-product">
+                <div class="popular-rank">01</div>
+
+                <div class="popular-product-image">
+                    <i class="bi bi-basket2"></i>
+                </div>
+
+                <div class="popular-product-info">
+                    <strong>Organik Avokado</strong>
+                    <span>Meyve & Sebze</span>
+                </div>
+
+                <div class="popular-product-sales">
+                    <strong>248</strong>
+                    <span>satış</span>
+                </div>
+            </div>
+
+            <div class="popular-product">
+                <div class="popular-rank">02</div>
+
+                <div class="popular-product-image">
+                    <i class="bi bi-cup-straw"></i>
+                </div>
+
+                <div class="popular-product-info">
+                    <strong>Portakal Suyu</strong>
+                    <span>İçecekler</span>
+                </div>
+
+                <div class="popular-product-sales">
+                    <strong>196</strong>
+                    <span>satış</span>
+                </div>
+            </div>
+
+            <div class="popular-product">
+                <div class="popular-rank">03</div>
+
+                <div class="popular-product-image">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+
+                <div class="popular-product-info">
+                    <strong>Granola Paketi</strong>
+                    <span>Atıştırmalık</span>
+                </div>
+
+                <div class="popular-product-sales">
+                    <strong>174</strong>
+                    <span>satış</span>
+                </div>
+            </div>
+
+            <div class="popular-product">
+                <div class="popular-rank">04</div>
+
+                <div class="popular-product-image">
+                    <i class="bi bi-egg"></i>
+                </div>
+
+                <div class="popular-product-info">
+                    <strong>Organik Yumurta</strong>
+                    <span>Kahvaltılık</span>
+                </div>
+
+                <div class="popular-product-sales">
+                    <strong>152</strong>
+                    <span>satış</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="admin-card quick-actions-card">
+
+    <div class="card-heading">
+        <div>
+            <h3>Hızlı İşlemler</h3>
+            <p>Sık kullandığınız yönetim işlemlerine hızlıca ulaşın</p>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="CreateCategory"
+           class="quick-action">
+
+            <div class="quick-action-icon green">
+                <i class="bi bi-tag"></i>
+            </div>
+
+            <div>
+                <strong>Kategori Ekle</strong>
+                <span>Yeni kategori oluştur</span>
+            </div>
+
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+        <a href="#" class="quick-action">
+            <div class="quick-action-icon blue">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <strong>Ürün Ekle</strong>
+                <span>Yeni ürün oluştur</span>
+            </div>
+
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+        <a href="#" class="quick-action">
+            <div class="quick-action-icon orange">
+                <i class="bi bi-percent"></i>
+            </div>
+
+            <div>
+                <strong>İndirim Oluştur</strong>
+                <span>Yeni kampanya tanımla</span>
+            </div>
+
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+        <a href="#" class="quick-action">
+            <div class="quick-action-icon purple">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
+            <div>
+                <strong>Satış Ekle</strong>
+                <span>Yeni satış kaydı oluştur</span>
+            </div>
+
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+    </div>
+
+</div>

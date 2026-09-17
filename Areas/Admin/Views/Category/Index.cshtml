@@ -1,0 +1,29 @@
+﻿@model List<FoodMart.Dtos.CategoryDtos.ResultCategoryDto>
+
+
+<h2>Kategoriler</h2>
+
+<a href="/Category/CreateCategory">Yeni Kategori Ekle</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kategori</th>
+            <th>Icon</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Icon</td>
+                <td><a href="/Category/DeleteCategory/@item.Id">Sil</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
