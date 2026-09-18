@@ -1,12 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FoodMart.Services.ProductServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FoodMart.ViewComponents
 {
     public class LatestProductsComponentPartial : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly IProductService _productService;
+
+        public LatestProductsComponentPartial(
+            IProductService productService)
         {
-            return View();
+            _productService = productService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var products = await _productService.GetLatestProductsAsync(10);
+
+            return View(products);
         }
     }
 }
