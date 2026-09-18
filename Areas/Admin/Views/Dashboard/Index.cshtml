@@ -1,7 +1,32 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
-}
+﻿@using System.Text.Json
+@using FoodMart.Dtos.DashboardDtos
+@model DashboardDto
 
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var salesChartData = Model.Last7DaysSales
+        .Select(x => new
+        {
+            label = x.Date.ToLocalTime().ToString("dd.MM"),
+            sales = x.TotalQuantitySold,
+            revenue = x.TotalRevenue
+        });
+
+    var categoryChartData = Model.CategorySales
+        .Select(x => new
+        {
+            label = x.CategoryName,
+            value = x.TotalQuantitySold
+        });
+}
+<script id="dashboardSalesData" type="application/json">
+    @Html.Raw(JsonSerializer.Serialize(salesChartData))
+</script>
+
+<script id="dashboardCategoryData" type="application/json">
+    @Html.Raw(JsonSerializer.Serialize(categoryChartData))
+</script>
 <div class="page-header">
     <div class="page-title-area">
         <h1>Dashboard</h1>
@@ -22,74 +47,80 @@
             <div class="stat-icon stat-icon-green">
                 <i class="bi bi-box-seam"></i>
             </div>
-
-            <span class="stat-change positive">
-                <i class="bi bi-arrow-up-short"></i>
-                %12.5
-            </span>
         </div>
 
         <div class="stat-content">
             <span class="stat-label">Toplam Ürün</span>
-            <h3>128</h3>
-            <p>Geçen aya göre <strong>14 yeni ürün</strong></p>
+
+            <h3>@Model.TotalProducts</h3>
+
+            <p>
+                Bu ay
+                <strong>@Model.NewProductsThisMonth yeni ürün</strong>
+                eklendi
+            </p>
         </div>
     </div>
+
 
     <div class="stat-card">
         <div class="stat-card-top">
             <div class="stat-icon stat-icon-blue">
                 <i class="bi bi-bag-check"></i>
             </div>
-
-            <span class="stat-change positive">
-                <i class="bi bi-arrow-up-short"></i>
-                %8.2
-            </span>
         </div>
 
         <div class="stat-content">
             <span class="stat-label">Toplam Satış</span>
-            <h3>1.248</h3>
-            <p>Bu ay <strong>186 satış</strong> gerçekleşti</p>
+
+            <h3>@Model.TotalSalesQuantity.ToString("N0")</h3>
+
+            <p>
+                Bu ay
+                <strong>@Model.SalesThisMonth adet ürün</strong>
+                satıldı
+            </p>
         </div>
     </div>
+
 
     <div class="stat-card">
         <div class="stat-card-top">
             <div class="stat-icon stat-icon-orange">
                 <i class="bi bi-currency-dollar"></i>
             </div>
-
-            <span class="stat-change positive">
-                <i class="bi bi-arrow-up-short"></i>
-                %18.4
-            </span>
         </div>
 
         <div class="stat-content">
             <span class="stat-label">Toplam Gelir</span>
-            <h3>₺84.250</h3>
-            <p>Bu ay <strong>₺12.430 artış</strong></p>
+
+            <h3>₺@Model.TotalRevenue.ToString("N2")</h3>
+
+            <p>
+                Bu ay
+                <strong>₺@Model.RevenueThisMonth.ToString("N2")</strong>
+                gelir elde edildi
+            </p>
         </div>
     </div>
+
 
     <div class="stat-card">
         <div class="stat-card-top">
             <div class="stat-icon stat-icon-purple">
                 <i class="bi bi-envelope-heart"></i>
             </div>
-
-            <span class="stat-change positive">
-                <i class="bi bi-arrow-up-short"></i>
-                %5.7
-            </span>
         </div>
 
         <div class="stat-content">
             <span class="stat-label">Bülten Abonesi</span>
-            <h3>2.841</h3>
-            <p>Son 7 günde <strong>+63 yeni abone</strong></p>
+
+            <h3>@Model.TotalSubscribers.ToString("N0")</h3>
+
+            <p>
+                Son 7 günde
+                <strong>+@Model.NewSubscribersLast7Days yeni abone</strong>
+            </p>
         </div>
     </div>
 
@@ -143,35 +174,48 @@
             <canvas id="categoryChart"></canvas>
 
             <div class="donut-center">
-                <strong>1.248</strong>
+                <strong>@Model.TotalSalesQuantity.ToString("N0")</strong>
                 <span>Satış</span>
             </div>
         </div>
 
         <div class="category-chart-legend">
-            <div>
-                <span class="category-color category-one"></span>
-                Meyve & Sebze
-                <strong>%38</strong>
-            </div>
 
-            <div>
-                <span class="category-color category-two"></span>
-                İçecekler
-                <strong>%27</strong>
-            </div>
+            @{
+                var totalCategorySales =
+                    Model.CategorySales.Sum(x => x.TotalQuantitySold);
 
-            <div>
-                <span class="category-color category-three"></span>
-                Atıştırmalık
-                <strong>%21</strong>
-            </div>
+                var categoryIndex = 0;
+            }
 
-            <div>
-                <span class="category-color category-four"></span>
-                Diğer
-                <strong>%14</strong>
-            </div>
+            @foreach (var category in Model.CategorySales.Take(4))
+            {
+                var percentage = totalCategorySales > 0
+                    ? Math.Round(
+                        (decimal)category.TotalQuantitySold /
+                        totalCategorySales * 100,
+                        1)
+                    : 0;
+
+                var colorClass = categoryIndex switch
+                {
+                    0 => "category-one",
+                    1 => "category-two",
+                    2 => "category-three",
+                    _ => "category-four"
+                };
+
+                <div>
+                    <span class="category-color @colorClass"></span>
+
+                    @category.CategoryName
+
+                    <strong>%@percentage</strong>
+                </div>
+
+                categoryIndex++;
+            }
+
         </div>
 
     </div>
@@ -189,7 +233,10 @@
                 <p>Gerçekleştirilen son satış işlemleri</p>
             </div>
 
-            <a href="#" class="view-all-link">
+            <a asp-area="Admin"
+               asp-controller="Sale"
+               asp-action="Index"
+               class="view-all-link">
                 Tümünü Gör
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -197,10 +244,11 @@
 
         <div class="admin-table-wrapper">
             <table class="admin-table">
+
                 <thead>
                     <tr>
                         <th>Ürün</th>
-                        <th>Müşteri</th>
+                        <th>Adet</th>
                         <th>Tarih</th>
                         <th>Tutar</th>
                         <th>Durum</th>
@@ -209,103 +257,77 @@
 
                 <tbody>
 
-                    <tr>
-                        <td>
-                            <div class="table-product">
-                                <div class="table-product-icon">
-                                    <i class="bi bi-basket"></i>
+                    @if (Model.RecentSales.Any())
+                    {
+                        foreach (var sale in Model.RecentSales)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="table-product">
+
+                                        <div class="table-product-icon">
+                                            <i class="bi bi-basket"></i>
+                                        </div>
+
+                                        <div>
+                                            <strong>@sale.ProductName</strong>
+
+                                            <span>
+                                                #@sale.Id[^6..].ToUpper()
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @sale.Quantity adet
+                                </td>
+
+                                <td>
+                                    @sale.SaleDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ₺@sale.TotalPrice.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status-badge success">
+                                        Tamamlandı
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">
+
+                                <div class="empty-state">
+
+                                    <div class="empty-state-icon">
+                                        <i class="bi bi-bag-x"></i>
+                                    </div>
+
+                                    <strong>Henüz satış bulunmuyor</strong>
+
+                                    <p>
+                                        Yeni satışlar eklendiğinde burada
+                                        görüntülenecektir.
+                                    </p>
+
                                 </div>
-                                <div>
-                                    <strong>Organik Avokado</strong>
-                                    <span>#FM-10248</span>
-                                </div>
-                            </div>
-                        </td>
 
-                        <td>Ahmet Yılmaz</td>
-                        <td>Bugün, 10:42</td>
-                        <td><strong>₺249,90</strong></td>
-
-                        <td>
-                            <span class="status-badge success">
-                                Tamamlandı
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div class="table-product">
-                                <div class="table-product-icon">
-                                    <i class="bi bi-cup-straw"></i>
-                                </div>
-                                <div>
-                                    <strong>Portakal Suyu</strong>
-                                    <span>#FM-10247</span>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td>Selin Kaya</td>
-                        <td>Bugün, 09:18</td>
-                        <td><strong>₺119,50</strong></td>
-
-                        <td>
-                            <span class="status-badge pending">
-                                Bekliyor
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div class="table-product">
-                                <div class="table-product-icon">
-                                    <i class="bi bi-box"></i>
-                                </div>
-                                <div>
-                                    <strong>Granola Paketi</strong>
-                                    <span>#FM-10246</span>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td>Mehmet Demir</td>
-                        <td>Dün, 18:36</td>
-                        <td><strong>₺184,75</strong></td>
-
-                        <td>
-                            <span class="status-badge success">
-                                Tamamlandı
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div class="table-product">
-                                <div class="table-product-icon">
-                                    <i class="bi bi-basket2"></i>
-                                </div>
-                                <div>
-                                    <strong>Taze Sebze Paketi</strong>
-                                    <span>#FM-10245</span>
-                                </div>
-                            </div>
-                        </td>
-
-                        <td>Elif Aydın</td>
-                        <td>Dün, 16:12</td>
-                        <td><strong>₺326,20</strong></td>
-
-                        <td>
-                            <span class="status-badge success">
-                                Tamamlandı
-                            </span>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    }
 
                 </tbody>
+
             </table>
         </div>
 
@@ -323,77 +345,77 @@
 
         <div class="popular-product-list">
 
-            <div class="popular-product">
-                <div class="popular-rank">01</div>
+            @if (Model.PopularProducts.Any())
+            {
+                var rank = 1;
 
-                <div class="popular-product-image">
-                    <i class="bi bi-basket2"></i>
+                foreach (var product in Model.PopularProducts)
+                {
+                    <div class="popular-product">
+
+                        <div class="popular-rank">
+                            @rank.ToString("D2")
+                        </div>
+
+                        <div class="popular-product-image">
+
+                            @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl"
+                                     alt="@product.ProductName"
+                                     style="width:100%; height:100%; object-fit:cover; border-radius:10px;" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-box-seam"></i>
+                            }
+
+                        </div>
+
+                        <div class="popular-product-info">
+
+                            <strong>
+                                @product.ProductName
+                            </strong>
+
+                            <span>
+                                @product.CategoryName
+                            </span>
+
+                        </div>
+
+                        <div class="popular-product-sales">
+
+                            <strong>
+                                @product.TotalQuantitySold
+                            </strong>
+
+                            <span>satış</span>
+
+                        </div>
+
+                    </div>
+
+                    rank++;
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        <i class="bi bi-bar-chart"></i>
+                    </div>
+
+                    <strong>Satış verisi bulunmuyor</strong>
+
+                    <p>
+                        Ürün satışları eklendiğinde çok satan
+                        ürünler burada görüntülenecektir.
+                    </p>
+
                 </div>
-
-                <div class="popular-product-info">
-                    <strong>Organik Avokado</strong>
-                    <span>Meyve & Sebze</span>
-                </div>
-
-                <div class="popular-product-sales">
-                    <strong>248</strong>
-                    <span>satış</span>
-                </div>
-            </div>
-
-            <div class="popular-product">
-                <div class="popular-rank">02</div>
-
-                <div class="popular-product-image">
-                    <i class="bi bi-cup-straw"></i>
-                </div>
-
-                <div class="popular-product-info">
-                    <strong>Portakal Suyu</strong>
-                    <span>İçecekler</span>
-                </div>
-
-                <div class="popular-product-sales">
-                    <strong>196</strong>
-                    <span>satış</span>
-                </div>
-            </div>
-
-            <div class="popular-product">
-                <div class="popular-rank">03</div>
-
-                <div class="popular-product-image">
-                    <i class="bi bi-box-seam"></i>
-                </div>
-
-                <div class="popular-product-info">
-                    <strong>Granola Paketi</strong>
-                    <span>Atıştırmalık</span>
-                </div>
-
-                <div class="popular-product-sales">
-                    <strong>174</strong>
-                    <span>satış</span>
-                </div>
-            </div>
-
-            <div class="popular-product">
-                <div class="popular-rank">04</div>
-
-                <div class="popular-product-image">
-                    <i class="bi bi-egg"></i>
-                </div>
-
-                <div class="popular-product-info">
-                    <strong>Organik Yumurta</strong>
-                    <span>Kahvaltılık</span>
-                </div>
-
-                <div class="popular-product-sales">
-                    <strong>152</strong>
-                    <span>satış</span>
-                </div>
-            </div>
+            }
 
         </div>
 
@@ -443,7 +465,10 @@
             <i class="bi bi-chevron-right"></i>
         </a>
 
-        <a href="#" class="quick-action">
+        <a asp-area="Admin"
+           asp-controller="Discount"
+           asp-action="CreateDiscount"
+           class="quick-action">
             <div class="quick-action-icon orange">
                 <i class="bi bi-percent"></i>
             </div>
@@ -456,7 +481,10 @@
             <i class="bi bi-chevron-right"></i>
         </a>
 
-        <a href="#" class="quick-action">
+        <a asp-area="Admin"
+           asp-controller="Sale"
+           asp-action="CreateSale"
+           class="quick-action">
             <div class="quick-action-icon purple">
                 <i class="bi bi-graph-up-arrow"></i>
             </div>

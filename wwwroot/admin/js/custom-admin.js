@@ -51,48 +51,66 @@
 
 function initializeDashboardCharts() {
 
-    const salesCanvas = document.getElementById("salesChart");
-    const categoryCanvas = document.getElementById("categoryChart");
+    const salesCanvas =
+        document.getElementById("salesChart");
 
-    if (salesCanvas) {
+    const categoryCanvas =
+        document.getElementById("categoryChart");
+
+    const salesDataElement =
+        document.getElementById("dashboardSalesData");
+
+    const categoryDataElement =
+        document.getElementById("dashboardCategoryData");
+
+
+    // SALES CHART
+    if (salesCanvas && salesDataElement) {
+
+        const salesData =
+            JSON.parse(salesDataElement.textContent);
+
+        const labels =
+            salesData.map(item => item.label);
+
+        const sales =
+            salesData.map(item => item.sales);
+
+        const revenue =
+            salesData.map(item => item.revenue);
+
 
         new Chart(salesCanvas, {
             type: "line",
 
             data: {
-                labels: [
-                    "Pazartesi",
-                    "Salı",
-                    "Çarşamba",
-                    "Perşembe",
-                    "Cuma",
-                    "Cumartesi",
-                    "Pazar"
-                ],
+                labels: labels,
 
                 datasets: [
                     {
                         label: "Satış",
-                        data: [120, 165, 142, 198, 184, 235, 218],
+                        data: sales,
                         borderColor: "#347c3a",
-                        backgroundColor: "rgba(52, 124, 58, 0.08)",
+                        backgroundColor:
+                            "rgba(52, 124, 58, 0.08)",
                         fill: true,
                         tension: 0.4,
                         borderWidth: 2,
-                        pointRadius: 0,
-                        pointHoverRadius: 5
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        yAxisID: "y"
                     },
-
                     {
                         label: "Gelir",
-                        data: [90, 115, 108, 148, 135, 175, 168],
+                        data: revenue,
                         borderColor: "#9acb9e",
                         backgroundColor: "transparent",
                         tension: 0.4,
                         borderWidth: 2,
                         borderDash: [5, 5],
-                        pointRadius: 0,
-                        pointHoverRadius: 5
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        yAxisID: "yRevenue"
                     }
                 ]
             },
@@ -114,11 +132,35 @@ function initializeDashboardCharts() {
                     tooltip: {
                         padding: 10,
                         cornerRadius: 8,
-                        titleFont: {
-                            size: 10
-                        },
-                        bodyFont: {
-                            size: 9
+
+                        callbacks: {
+                            label: function (context) {
+
+                                if (
+                                    context.dataset.label ===
+                                    "Gelir"
+                                ) {
+                                    const value =
+                                        Number(context.raw);
+
+                                    return (
+                                        " Gelir: " +
+                                        value.toLocaleString(
+                                            "tr-TR",
+                                            {
+                                                style: "currency",
+                                                currency: "TRY"
+                                            }
+                                        )
+                                    );
+                                }
+
+                                return (
+                                    " Satış: " +
+                                    context.raw +
+                                    " adet"
+                                );
+                            }
                         }
                     }
                 },
@@ -143,6 +185,7 @@ function initializeDashboardCharts() {
 
                     y: {
                         beginAtZero: true,
+                        position: "left",
 
                         border: {
                             display: false
@@ -154,6 +197,37 @@ function initializeDashboardCharts() {
 
                         ticks: {
                             color: "#9aa39d",
+                            precision: 0,
+
+                            font: {
+                                size: 8
+                            }
+                        }
+                    },
+
+                    yRevenue: {
+                        beginAtZero: true,
+                        position: "right",
+
+                        border: {
+                            display: false
+                        },
+
+                        grid: {
+                            drawOnChartArea: false
+                        },
+
+                        ticks: {
+                            color: "#9aa39d",
+
+                            callback: function (value) {
+                                return (
+                                    "₺" +
+                                    Number(value)
+                                        .toLocaleString("tr-TR")
+                                );
+                            },
+
                             font: {
                                 size: 8
                             }
@@ -165,28 +239,47 @@ function initializeDashboardCharts() {
     }
 
 
-    if (categoryCanvas) {
+    // CATEGORY CHART
+    if (categoryCanvas && categoryDataElement) {
+
+        const categoryData =
+            JSON.parse(categoryDataElement.textContent);
+
+        const categoryLabels =
+            categoryData.map(item => item.label);
+
+        const categoryValues =
+            categoryData.map(item => item.value);
+
+        const categoryColors = [
+            "#347c3a",
+            "#72b578",
+            "#b4d9b7",
+            "#e0eee1",
+            "#9fc9a3",
+            "#cce3ce",
+            "#5f9d65",
+            "#dbeadc"
+        ];
+
 
         new Chart(categoryCanvas, {
             type: "doughnut",
 
             data: {
-                labels: [
-                    "Meyve & Sebze",
-                    "İçecekler",
-                    "Atıştırmalık",
-                    "Diğer"
-                ],
+                labels: categoryLabels,
 
                 datasets: [{
-                    data: [38, 27, 21, 14],
+                    data: categoryValues,
 
-                    backgroundColor: [
-                        "#347c3a",
-                        "#72b578",
-                        "#b4d9b7",
-                        "#e0eee1"
-                    ],
+                    backgroundColor:
+                        categoryLabels.map(
+                            (_, index) =>
+                                categoryColors[
+                                index %
+                                categoryColors.length
+                                ]
+                        ),
 
                     borderWidth: 0,
                     hoverOffset: 5
@@ -206,7 +299,31 @@ function initializeDashboardCharts() {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                return ` ${context.label}: %${context.raw}`;
+
+                                const total =
+                                    context.dataset.data.reduce(
+                                        (sum, value) =>
+                                            sum + Number(value),
+                                        0
+                                    );
+
+                                const value =
+                                    Number(context.raw);
+
+                                const percentage =
+                                    total > 0
+                                        ? (
+                                            value /
+                                            total *
+                                            100
+                                        ).toFixed(1)
+                                        : 0;
+
+                                return (
+                                    ` ${context.label}: ` +
+                                    `${value} satış ` +
+                                    `(%${percentage})`
+                                );
                             }
                         }
                     }
@@ -215,6 +332,7 @@ function initializeDashboardCharts() {
         });
     }
 }
+
 
 document.addEventListener(
     "DOMContentLoaded",

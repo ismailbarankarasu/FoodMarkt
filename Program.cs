@@ -1,4 +1,5 @@
 using FoodMart.Services.CategoryServices;
+using FoodMart.Services.DashboardServices;
 using FoodMart.Services.DiscountServices;
 using FoodMart.Services.EmailServices;
 using FoodMart.Services.FeatureServices;
@@ -37,6 +38,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ISubscriberService, SubscriberService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
