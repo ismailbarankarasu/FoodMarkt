@@ -1,0 +1,236 @@
+﻿@model List<FoodMart.Dtos.ProductDtos.ResultProductDto>
+
+@{
+    ViewData["Title"] = ViewBag.CategoryName;
+
+    var categoryName =
+        ViewBag.CategoryName as string ?? "Kategori";
+}
+
+<section class="py-5">
+
+    <div class="container-fluid">
+
+        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5">
+
+            <div>
+
+                <div class="mb-2">
+
+                    <a asp-controller="Product"
+                       asp-action="Index"
+                       class="text-decoration-none text-muted">
+
+                        Tüm Ürünler
+
+                    </a>
+
+                    <span class="mx-2">/</span>
+
+                    <span>
+                        @categoryName
+                    </span>
+
+                </div>
+
+                <h2 class="section-title mb-2">
+                    @categoryName
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Bu kategorideki ürünleri keşfedin.
+                </p>
+
+            </div>
+
+            <span class="text-muted">
+                @Model.Count ürün
+            </span>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+
+                @foreach (var item in Model)
+                {
+                    var hasDiscount =
+                        item.DiscountPrice.HasValue &&
+                        item.DiscountPrice.Value > 0 &&
+                        item.DiscountPrice.Value < item.Price;
+
+                    var discountRate = 0;
+
+                    if (hasDiscount && item.Price > 0)
+                    {
+                        discountRate = (int)Math.Round(
+                            (1 - (item.DiscountPrice!.Value / item.Price)) * 100);
+                    }
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <div class="product-item h-100">
+
+                            @if (hasDiscount)
+                            {
+                                <span class="badge bg-success position-absolute m-3">
+                                    -%@discountRate
+                                </span>
+                            }
+
+                            <a href="#"
+                               class="btn-wishlist"
+                               title="Favorilere Ekle">
+
+                                <svg width="24" height="24">
+                                    <use xlink:href="#heart"></use>
+                                </svg>
+
+                            </a>
+
+                            <figure>
+
+                                <a href="#"
+                                   title="@item.Name">
+
+                                    <img src="@item.ImageUrl"
+                                         alt="@item.Name"
+                                         class="tab-image" />
+
+                                </a>
+
+                            </figure>
+
+                            <h3>
+                                @item.Name
+                            </h3>
+
+                            <div class="mb-2">
+
+                                <span class="qty">
+                                    @item.CategoryName
+                                </span>
+
+                            </div>
+
+                            @if (item.Stock > 0)
+                            {
+                                <span class="text-success small">
+                                    Stokta
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-danger small">
+                                    Stokta Yok
+                                </span>
+                            }
+
+                            <div class="mt-2 mb-3">
+
+                                @if (hasDiscount)
+                                {
+                                    <span class="price">
+                                        @item.DiscountPrice!.Value.ToString("N2") ₺
+                                    </span>
+
+                                    <span class="text-muted text-decoration-line-through ms-2">
+                                        @item.Price.ToString("N2") ₺
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="price">
+                                        @item.Price.ToString("N2") ₺
+                                    </span>
+                                }
+
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+
+                                <div class="input-group product-qty">
+
+                                    <span class="input-group-btn">
+
+                                        <button type="button"
+                                                class="quantity-left-minus btn btn-danger btn-number">
+
+                                            <svg width="16" height="16">
+                                                <use xlink:href="#minus"></use>
+                                            </svg>
+
+                                        </button>
+
+                                    </span>
+
+                                    <input type="text"
+                                           name="quantity"
+                                           class="form-control input-number"
+                                           value="1"
+                                           min="1" />
+
+                                    <span class="input-group-btn">
+
+                                        <button type="button"
+                                                class="quantity-right-plus btn btn-success btn-number">
+
+                                            <svg width="16" height="16">
+                                                <use xlink:href="#plus"></use>
+                                            </svg>
+
+                                        </button>
+
+                                    </span>
+
+                                </div>
+
+                                <a href="#"
+                                   class="nav-link">
+
+                                    Sepete Ekle
+
+                                    <iconify-icon icon="uil:shopping-cart">
+                                    </iconify-icon>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+                <h3 class="mt-3">
+                    Bu kategoride ürün bulunamadı
+                </h3>
+
+                <p class="text-muted">
+                    Bu kategoriye ait aktif bir ürün bulunmuyor.
+                </p>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="btn btn-primary mt-2">
+
+                    Tüm Ürünleri Gör
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</section>

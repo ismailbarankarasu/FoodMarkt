@@ -1,145 +1,386 @@
-﻿<header>
+﻿@model List<FoodMart.Dtos.CategoryDtos.ResultCategoryDto>
+
+<header>
+
     <div class="container-fluid">
+
         <div class="row py-3 border-bottom">
 
+            <!-- Logo -->
             <div class="col-sm-4 col-lg-3 text-center text-sm-start">
+
                 <div class="main-logo">
-                    <a href="index.html">
-                        <img src="~/FoodMart-1.0.0/images/logo.png" alt="logo" class="img-fluid">
+
+                    <a asp-controller="Default"
+                       asp-action="Index">
+
+                        <img src="~/FoodMart-1.0.0/images/logo.png"
+                             alt="FoodMart"
+                             class="img-fluid">
+
                     </a>
+
                 </div>
+
             </div>
 
+
+            <!-- Arama -->
             <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
-                <div class="search-bar row bg-light p-2 my-2 rounded-4">
-                    <div class="col-md-4 d-none d-md-block">
-                        <select class="form-select border-0 bg-transparent">
-                            <option>All Categories</option>
-                            <option>Groceries</option>
-                            <option>Drinks</option>
-                            <option>Chocolates</option>
-                        </select>
+
+                <form asp-controller="Product"
+                      asp-action="Search"
+                      method="get"
+                      id="search-form">
+
+                    <div class="search-bar row bg-light p-2 my-2 rounded-4">
+
+                        <div class="col-md-4 d-none d-md-block">
+
+                            <select name="categoryId"
+                                    class="form-select border-0 bg-transparent">
+
+                                <option value="">
+                                    Tüm Kategoriler
+                                </option>
+
+                                @foreach (var category in Model)
+                                {
+                                    <option value="@category.Id">
+                                        @category.Name
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-11 col-md-7">
+
+                            <input type="text"
+                                   name="search"
+                                   class="form-control border-0 bg-transparent"
+                                   placeholder="Ürünlerde ara..."
+                                   autocomplete="off" />
+
+                        </div>
+
+
+                        <div class="col-1 d-flex align-items-center justify-content-center">
+
+                            <button type="submit"
+                                    class="border-0 bg-transparent p-0"
+                                    title="Ara"
+                                    aria-label="Ürün Ara">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24"
+                                     viewBox="0 0 24 24">
+
+                                    <path fill="currentColor"
+                                          d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+
+                                </svg>
+
+                            </button>
+
+                        </div>
+
                     </div>
-                    <div class="col-11 col-md-7">
-                        <form id="search-form" class="text-center" action="index.html" method="post">
-                            <input type="text" class="form-control border-0 bg-transparent" placeholder="Search for more than 20,000 products" />
-                        </form>
-                    </div>
-                    <div class="col-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" /></svg>
-                    </div>
-                </div>
+
+                </form>
+
             </div>
 
+
+            <!-- Sağ Alan -->
             <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+
                 <div class="support-box text-end d-none d-xl-block">
-                    <span class="fs-6 text-muted">For Support?</span>
-                    <h5 class="mb-0">+980-34984089</h5>
+
+                    <span class="fs-6 text-muted">
+                        Destek Hattı
+                    </span>
+
+                    <h5 class="mb-0">
+                        +90 555 555 55 55
+                    </h5>
+
                 </div>
+
 
                 <ul class="d-flex justify-content-end list-unstyled m-0">
+
                     <li>
-                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
-                            <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#user"></use></svg>
+
+                        <a href="#"
+                           class="rounded-circle bg-light p-2 mx-1"
+                           title="Hesabım">
+
+                            <svg width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24">
+
+                                <use xlink:href="#user"></use>
+
+                            </svg>
+
                         </a>
+
                     </li>
+
                     <li>
-                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
-                            <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#heart"></use></svg>
+
+                        <a href="#"
+                           class="rounded-circle bg-light p-2 mx-1"
+                           title="Favorilerim">
+
+                            <svg width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24">
+
+                                <use xlink:href="#heart"></use>
+
+                            </svg>
+
                         </a>
+
                     </li>
+
                     <li class="d-lg-none">
-                        <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                            <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#cart"></use></svg>
+
+                        <a href="#"
+                           class="rounded-circle bg-light p-2 mx-1"
+                           data-bs-toggle="offcanvas"
+                           data-bs-target="#offcanvasCart"
+                           aria-controls="offcanvasCart">
+
+                            <svg width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24">
+
+                                <use xlink:href="#cart"></use>
+
+                            </svg>
+
                         </a>
+
                     </li>
+
                     <li class="d-lg-none">
-                        <a href="#" class="rounded-circle bg-light p-2 mx-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-                            <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#search"></use></svg>
+
+                        <a href="#"
+                           class="rounded-circle bg-light p-2 mx-1"
+                           data-bs-toggle="offcanvas"
+                           data-bs-target="#offcanvasSearch"
+                           aria-controls="offcanvasSearch">
+
+                            <svg width="24"
+                                 height="24"
+                                 viewBox="0 0 24 24">
+
+                                <use xlink:href="#search"></use>
+
+                            </svg>
+
                         </a>
+
                     </li>
+
                 </ul>
 
+
                 <div class="cart text-end d-none d-lg-block dropdown">
-                    <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                        <span class="fs-6 text-muted dropdown-toggle">Your Cart</span>
-                        <span class="cart-total fs-5 fw-bold">$1290.00</span>
+
+                    <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasCart"
+                            aria-controls="offcanvasCart">
+
+                        <span class="fs-6 text-muted dropdown-toggle">
+                            Sepetiniz
+                        </span>
+
+                        <span class="cart-total fs-5 fw-bold">
+                            0,00 ₺
+                        </span>
+
                     </button>
+
                 </div>
+
             </div>
 
         </div>
+
     </div>
+
+
+    <!-- Navigation -->
     <div class="container-fluid">
+
         <div class="row py-3">
-            <div class="d-flex  justify-content-center justify-content-sm-between align-items-center">
+
+            <div class="d-flex justify-content-center justify-content-sm-between align-items-center">
+
                 <nav class="main-menu d-flex navbar navbar-expand-lg">
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasNavbar"
                             aria-controls="offcanvasNavbar">
+
                         <span class="navbar-toggler-icon"></span>
+
                     </button>
 
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+
+                    <div class="offcanvas offcanvas-end"
+                         tabindex="-1"
+                         id="offcanvasNavbar"
+                         aria-labelledby="offcanvasNavbarLabel">
 
                         <div class="offcanvas-header justify-content-center">
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="offcanvas"
+                                    aria-label="Kapat">
+                            </button>
+
                         </div>
+
 
                         <div class="offcanvas-body">
 
-                            <select class="filter-categories border-0 mb-0 me-5">
-                                <option>Shop by Departments</option>
-                                <option>Groceries</option>
-                                <option>Drinks</option>
-                                <option>Chocolates</option>
+                            <!-- Dinamik Kategoriler -->
+                            <select class="filter-categories border-0 mb-0 me-5"
+                                    id="headerCategoryNavigation">
+
+                                <option value="">
+                                    Kategoriler
+                                </option>
+
+                                @foreach (var category in Model)
+                                {
+                                    <option value="@category.Id">
+                                        @category.Name
+                                    </option>
+                                }
+
                             </select>
 
+
                             <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
+
                                 <li class="nav-item active">
-                                    <a href="#women" class="nav-link">Women</a>
+
+                                    <a asp-controller="Default"
+                                       asp-action="Index"
+                                       class="nav-link">
+
+                                        Ana Sayfa
+
+                                    </a>
+
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a href="#men" class="nav-link">Men</a>
-                                </li>
+
                                 <li class="nav-item">
-                                    <a href="#kids" class="nav-link">Kids</a>
+
+                                    <a href="#categories"
+                                       class="nav-link">
+
+                                        Kategoriler
+
+                                    </a>
+
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="#accessories" class="nav-link">Accessories</a>
+
+                                    <a href="#products"
+                                       class="nav-link">
+
+                                        Ürünler
+
+                                    </a>
+
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-                                    <ul class="dropdown-menu" aria-labelledby="pages">
-                                        <li><a href="index.html" class="dropdown-item">About Us </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Shop </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Single Product </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Cart </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Checkout </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Blog </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Single Post </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Styles </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Contact </a></li>
-                                        <li><a href="index.html" class="dropdown-item">Thank You </a></li>
-                                        <li><a href="index.html" class="dropdown-item">My Account </a></li>
-                                        <li><a href="index.html" class="dropdown-item">404 Error </a></li>
-                                    </ul>
-                                </li>
+
                                 <li class="nav-item">
-                                    <a href="#brand" class="nav-link">Brand</a>
+
+                                    <a href="#discounts"
+                                       class="nav-link">
+
+                                        Kampanyalar
+
+                                    </a>
+
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="#sale" class="nav-link">Sale</a>
+
+                                    <a href="#popular-products"
+                                       class="nav-link">
+
+                                        Çok Satanlar
+
+                                    </a>
+
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="#blog" class="nav-link">Blog</a>
+
+                                    <a href="#contact"
+                                       class="nav-link">
+
+                                        İletişim
+
+                                    </a>
+
                                 </li>
+
                             </ul>
 
                         </div>
 
                     </div>
-                </div>
+
+                </nav>
+
             </div>
+
         </div>
-    </header>
+
+    </div>
+
+</header>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const categoryNavigation =
+            document.getElementById("headerCategoryNavigation");
+
+        if (!categoryNavigation) {
+            return;
+        }
+
+        categoryNavigation.addEventListener("change", function () {
+
+            const categoryId = this.value;
+
+            if (!categoryId) {
+                window.location.href = "/Product";
+                return;
+            }
+
+            window.location.href =
+                "/Product/Category/" + encodeURIComponent(categoryId);
+        });
+
+    });
+</script>

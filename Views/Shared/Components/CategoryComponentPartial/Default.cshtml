@@ -42,7 +42,9 @@
 
                             @foreach (var item in Model)
                             {
-                                <a href="#"
+                                <a asp-controller="Product"
+                                   asp-action="Category"
+                                   asp-route-id="@item.Id"
                                    class="nav-link category-item swiper-slide">
 
                                     <img src="@item.Icon"
