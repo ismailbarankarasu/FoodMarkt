@@ -1,0 +1,215 @@
+﻿@model FoodMart.Dtos.ProductDtos.GetByIdProductDto
+
+@{
+    ViewData["Title"] = Model.Name;
+
+    var hasDiscount =
+        Model.DiscountPrice.HasValue &&
+        Model.DiscountPrice.Value > 0 &&
+        Model.DiscountPrice.Value < Model.Price;
+
+    var discountRate = 0;
+
+    if (hasDiscount && Model.Price > 0)
+    {
+        discountRate = (int)Math.Round(
+            (1 - (Model.DiscountPrice!.Value / Model.Price)) * 100);
+    }
+}
+
+<section class="py-5">
+
+    <div class="container-fluid">
+
+        <div class="mb-4">
+
+            <a asp-controller="Default"
+               asp-action="Index"
+               class="text-decoration-none text-muted">
+                Ana Sayfa
+            </a>
+
+            <span class="mx-2">/</span>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               class="text-decoration-none text-muted">
+                Ürünler
+            </a>
+
+            <span class="mx-2">/</span>
+
+            <span>@Model.Name</span>
+
+        </div>
+
+
+        <div class="row g-5 align-items-center">
+
+            <!-- Ürün Görseli -->
+            <div class="col-lg-6">
+
+                <div class="position-relative bg-light rounded-4 p-5 text-center">
+
+                    @if (hasDiscount)
+                    {
+                        <span class="badge bg-success position-absolute top-0 start-0 m-4 fs-6">
+                            -%@discountRate
+                        </span>
+                    }
+
+                    <img src="@Model.ImageUrl"
+                         alt="@Model.Name"
+                         class="img-fluid"
+                         style="max-height: 500px; object-fit: contain;" />
+
+                </div>
+
+            </div>
+
+
+            <!-- Ürün Bilgileri -->
+            <div class="col-lg-6">
+
+                <h1 class="mb-3">
+                    @Model.Name
+                </h1>
+
+                @if (Model.Stock > 0)
+                {
+                    <span class="badge bg-success-subtle text-success mb-3">
+                        Stokta
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger-subtle text-danger mb-3">
+                        Stokta Yok
+                    </span>
+                }
+
+
+                <div class="my-4">
+
+                    @if (hasDiscount)
+                    {
+                        <span class="fs-2 fw-bold text-primary">
+                            @Model.DiscountPrice!.Value.ToString("N2") ₺
+                        </span>
+
+                        <span class="fs-5 text-muted text-decoration-line-through ms-3">
+                            @Model.Price.ToString("N2") ₺
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="fs-2 fw-bold text-primary">
+                            @Model.Price.ToString("N2") ₺
+                        </span>
+                    }
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <h5>Ürün Açıklaması</h5>
+
+                    <p class="text-muted lh-lg">
+                        @Model.Description
+                    </p>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <span class="text-muted">
+                        Stok:
+                    </span>
+
+                    <strong class="ms-2">
+                        @Model.Stock adet
+                    </strong>
+
+                </div>
+
+
+                @if (Model.Stock > 0)
+                {
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+
+                        <div class="input-group product-qty"
+                             style="width: 140px;">
+
+                            <button type="button"
+                                    class="quantity-left-minus btn btn-danger btn-number"
+                                    data-type="minus">
+
+                                <svg width="16" height="16">
+                                    <use xlink:href="#minus"></use>
+                                </svg>
+
+                            </button>
+
+                            <input type="text"
+                                   name="quantity"
+                                   class="form-control input-number text-center"
+                                   value="1"
+                                   min="1"
+                                   max="@Model.Stock" />
+
+                            <button type="button"
+                                    class="quantity-right-plus btn btn-success btn-number"
+                                    data-type="plus">
+
+                                <svg width="16" height="16">
+                                    <use xlink:href="#plus"></use>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+
+                        <a href="#"
+                           class="btn btn-primary btn-lg px-4">
+
+                            <iconify-icon icon="uil:shopping-cart">
+                            </iconify-icon>
+
+                            Sepete Ekle
+
+                        </a>
+
+
+                        <a href="#"
+                           class="btn btn-outline-secondary btn-lg"
+                           title="Favorilere Ekle">
+
+                            <svg width="22" height="22">
+                                <use xlink:href="#heart"></use>
+                            </svg>
+
+                        </a>
+
+                    </div>
+                }
+                else
+                {
+                    <button type="button"
+                            class="btn btn-secondary btn-lg"
+                            disabled>
+
+                        Ürün Stokta Yok
+
+                    </button>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

@@ -36,7 +36,9 @@
                                     @item.Description
                                 </p>
 
-                                <a href="#"
+                                <a asp-controller="Product"
+                                   asp-action="Detail"
+                                   asp-route-id="@item.ProductId"
                                    class="btn btn-dark text-uppercase">
                                     Ürünü İncele
                                 </a>

@@ -13,7 +13,8 @@
                     </h2>
 
                     <div class="d-flex align-items-center">
-                        <a href="#"
+                        <a asp-controller="Product"
+                           asp-action="Index"
                            class="btn-link text-decoration-none">
                             Tüm Ürünleri Gör →
                         </a>
@@ -58,7 +59,9 @@
 
                             <figure>
 
-                                <a href="#"
+                                <a asp-controller="Product"
+                                   asp-action="Detail"
+                                   asp-route-id="@item.Id"
                                    title="@item.Name">
 
                                     @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
@@ -170,7 +173,7 @@
                                     <a href="#"
                                        class="nav-link">
 
-                                        Add to Cart
+                                        Sepete Ekle
 
                                         <iconify-icon icon="uil:shopping-cart">
                                         </iconify-icon>

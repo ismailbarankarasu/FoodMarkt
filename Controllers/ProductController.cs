@@ -65,5 +65,19 @@ namespace FoodMart.Controllers
 
             return View(products);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return NotFound();
+
+            var product = await _productService.GetByIdAsync(id);
+
+            if (product is null || !product.IsActive)
+                return NotFound();
+
+            return View(product);
+        }
     }
 }

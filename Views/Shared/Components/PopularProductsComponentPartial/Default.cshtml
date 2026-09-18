@@ -88,7 +88,9 @@
 
                                     <figure>
 
-                                        <a href="#"
+                                        <a asp-controller="Product"
+                                        asp-action="Detail"
+                                        asp-route-id="@item.ProductId"
                                            title="@item.ProductName">
 
                                             <img src="@item.ImageUrl"
@@ -100,7 +102,12 @@
                                     </figure>
 
                                     <h3>
-                                        @item.ProductName
+                                        <a asp-controller="Product"
+                                           asp-action="Detail"
+                                           asp-route-id="@item.ProductId"
+                                           class="text-decoration-none text-dark">
+                                            @item.ProductName
+                                        </a>
                                     </h3>
 
                                     <div class="mb-2">

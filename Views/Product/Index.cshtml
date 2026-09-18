@@ -69,7 +69,9 @@
 
                             <figure>
 
-                                <a href="#"
+                                <a asp-controller="Product"
+                                asp-action="Detail"
+                                asp-route-id="@item.Id"
                                    title="@item.Name">
 
                                     <img src="@item.ImageUrl"
