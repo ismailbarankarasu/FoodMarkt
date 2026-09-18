@@ -572,3 +572,106 @@ document
             }
         });
     });
+
+const saleQuantity =
+    document.getElementById("Quantity");
+
+const saleUnitPrice =
+    document.getElementById("saleUnitPrice");
+
+const saleTotalPreview =
+    document.getElementById("saleTotalPreview");
+
+function calculateSaleTotal() {
+
+    if (!saleQuantity ||
+        !saleUnitPrice ||
+        !saleTotalPreview) {
+        return;
+    }
+
+    const quantity =
+        parseInt(saleQuantity.value) || 0;
+
+    const unitPrice =
+        parseFloat(
+            saleUnitPrice.value.replace(",", ".")
+        ) || 0;
+
+    const total =
+        quantity * unitPrice;
+
+    saleTotalPreview.textContent =
+        total.toLocaleString(
+            "tr-TR",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        ) + " ₺";
+}
+
+if (saleQuantity && saleUnitPrice) {
+
+    saleQuantity.addEventListener(
+        "input",
+        calculateSaleTotal);
+
+    saleUnitPrice.addEventListener(
+        "input",
+        calculateSaleTotal);
+
+    calculateSaleTotal();
+}
+
+
+const saleSearch =
+    document.getElementById("saleSearch");
+
+if (saleSearch) {
+
+    saleSearch.addEventListener("input", function () {
+
+        const searchValue =
+            this.value
+                .toLocaleLowerCase("tr-TR")
+                .trim();
+
+        document
+            .querySelectorAll("#saleTable tbody tr")
+            .forEach(row => {
+
+                const productName =
+                    row.querySelector(".sale-product-name")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                row.style.display =
+                    productName.includes(searchValue)
+                        ? ""
+                        : "none";
+            });
+    });
+}
+
+
+document
+    .querySelectorAll(".delete-sale-form")
+    .forEach(form => {
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                const productName =
+                    this.dataset.sale ?? "bu satış";
+
+                const confirmed = confirm(
+                    `"${productName}" satış kaydını silmek istediğinize emin misiniz?`
+                );
+
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+            });
+    });

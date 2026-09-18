@@ -2179,3 +2179,60 @@ input {
         border: 0;
         cursor: pointer;
     }
+
+/* Sale */
+
+.sale-quantity-badge {
+    display: inline-flex;
+    padding: 6px 10px;
+    color: #47634f;
+    background: #edf6ef;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.sale-product-name {
+    color: #404a43;
+    font-size: 10px;
+}
+
+.sale-total-price {
+    color: var(--primary);
+    font-size: 10px;
+}
+
+.delete-sale-form {
+    margin: 0;
+}
+
+    .delete-sale-form button {
+        border: 0;
+        cursor: pointer;
+    }
+
+.sale-calculation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 20px;
+    text-align: center;
+    background: #f7faf7;
+    border-radius: 12px;
+}
+
+    .sale-calculation span {
+        color: #8c968f;
+        font-size: 9px;
+    }
+
+    .sale-calculation strong {
+        margin: 8px 0;
+        color: var(--primary);
+        font-size: 26px;
+    }
+
+    .sale-calculation small {
+        color: #a2aaa5;
+        font-size: 8px;
+    }

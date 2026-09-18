@@ -1,0 +1,211 @@
+﻿@model List<FoodMart.Dtos.SaleDtos.ResultSaleDto>
+
+@{
+    ViewData["Title"] = "Satış Yönetimi";
+
+    var totalQuantity = Model.Sum(x => x.Quantity);
+    var totalRevenue = Model.Sum(x => x.TotalPrice);
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Satış Yönetimi</h1>
+        <p>Ürün satış kayıtlarını yönetin ve satış performansını takip edin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Sale"
+       asp-action="CreateSale"
+       class="admin-btn admin-btn-primary">
+
+        <i class="bi bi-plus-lg"></i>
+        Yeni Satış
+
+    </a>
+
+</div>
+
+<div class="product-summary-grid">
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon green">
+            <i class="bi bi-receipt"></i>
+        </div>
+
+        <div>
+            <span>Satış Kaydı</span>
+            <strong>@Model.Count</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon blue">
+            <i class="bi bi-box-seam"></i>
+        </div>
+
+        <div>
+            <span>Satılan Ürün</span>
+            <strong>@totalQuantity</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon green">
+            <i class="bi bi-cash-stack"></i>
+        </div>
+
+        <div>
+            <span>Toplam Ciro</span>
+            <strong>@totalRevenue.ToString("N2") ₺</strong>
+        </div>
+    </div>
+
+</div>
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+
+        <div>
+            <h3>Satış Kayıtları</h3>
+            <p>Gerçekleştirilen ürün satışlarını görüntüleyin.</p>
+        </div>
+
+        <div class="table-search">
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="saleSearch"
+                   placeholder="Ürün ara..." />
+        </div>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table"
+                   id="saleTable">
+
+                <thead>
+                    <tr>
+                        <th>Ürün</th>
+                        <th>Adet</th>
+                        <th>Birim Fiyat</th>
+                        <th>Toplam</th>
+                        <th>Satış Tarihi</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong class="sale-product-name">
+                                    @item.ProductName
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="sale-quantity-badge">
+                                    @item.Quantity Adet
+                                </span>
+                            </td>
+
+                            <td>
+                                @item.UnitPrice.ToString("N2") ₺
+                            </td>
+
+                            <td>
+                                <strong class="sale-total-price">
+                                    @item.TotalPrice.ToString("N2") ₺
+                                </strong>
+                            </td>
+
+                            <td>
+                                @item.SaleDate.ToString("dd.MM.yyyy")
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Sale"
+                                       asp-action="UpdateSale"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Düzenle">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Sale"
+                                          asp-action="DeleteSale"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="delete-sale-form"
+                                          data-sale="@item.ProductName">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="table-action delete"
+                                                title="Sil">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <h3>Henüz satış kaydı bulunmuyor</h3>
+
+            <p>
+                Ürün satışlarını kaydederek satış verilerini
+                oluşturmaya başlayabilirsiniz.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Sale"
+               asp-action="CreateSale"
+               class="admin-btn admin-btn-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                İlk Satışı Ekle
+
+            </a>
+
+        </div>
+    }
+
+</div>

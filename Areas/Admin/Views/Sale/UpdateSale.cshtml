@@ -1,0 +1,187 @@
+﻿@model FoodMart.Dtos.SaleDtos.UpdateSaleDto
+
+@{
+    ViewData["Title"] = "Yeni Satış";
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Satış Güncelle</h1>
+        <p>Mevcut satış kaydını düzenleyin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Sale"
+       asp-action="Index"
+       class="admin-btn admin-btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        Satışlara Dön
+
+    </a>
+
+</div>
+
+<form method="post">
+
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div class="product-form-grid">
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-cart-check"></i>
+                    </div>
+
+                    <div>
+                        <h3>Satış Bilgileri</h3>
+                        <p>Satılan ürün ve miktar bilgilerini girin.</p>
+                    </div>
+
+                </div>
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ProductId">Ürün</label>
+
+                    <select asp-for="ProductId"
+                            asp-items="ViewBag.Products"
+                            class="admin-form-control">
+
+                        <option value="">Ürün seçiniz</option>
+
+                    </select>
+
+                    <span asp-validation-for="ProductId"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="Quantity">Satış Adedi</label>
+
+                    <div class="admin-input-wrapper">
+
+                        <i class="bi bi-box-seam"></i>
+
+                        <input asp-for="Quantity"
+                               type="number"
+                               min="1"
+                               class="admin-form-control" />
+
+                    </div>
+
+                    <span asp-validation-for="Quantity"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="UnitPrice">
+                        Birim Satış Fiyatı
+                    </label>
+
+                    <div class="admin-input-wrapper">
+
+                        <i class="bi bi-currency-exchange"></i>
+
+                        <input asp-for="UnitPrice"
+                               type="number"
+                               step="0.01"
+                               min="0.01"
+                               id="saleUnitPrice"
+                               class="admin-form-control"
+                               placeholder="69.90" />
+
+                    </div>
+
+                    <span asp-validation-for="UnitPrice"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="SaleDate">
+                        Satış Tarihi
+                    </label>
+
+                    <input asp-for="SaleDate"
+                           type="date"
+                           class="admin-form-control" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-calculator"></i>
+                    </div>
+
+                    <div>
+                        <h3>Satış Özeti</h3>
+                        <p>Toplam satış tutarı otomatik hesaplanır.</p>
+                    </div>
+
+                </div>
+
+                <div class="sale-calculation">
+
+                    <span>Tahmini Toplam</span>
+
+                    <strong id="saleTotalPreview">
+                        0,00 ₺
+                    </strong>
+
+                    <small>
+                        Adet × Birim Satış Fiyatı
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="product-form-actions">
+
+                <a asp-area="Admin"
+                   asp-controller="Sale"
+                   asp-action="Index"
+                   class="admin-btn admin-btn-secondary">
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="admin-btn admin-btn-primary">
+
+                    <i class="bi bi-check-lg"></i>
+                    Değişiklikleri Kaydet
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

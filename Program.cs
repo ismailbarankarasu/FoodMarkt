@@ -2,6 +2,7 @@ using FoodMart.Services.CategoryServices;
 using FoodMart.Services.DiscountServices;
 using FoodMart.Services.FeatureServices;
 using FoodMart.Services.ProductServices;
+using FoodMart.Services.SaleServices;
 using FoodMart.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -32,6 +33,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
     return client.GetDatabase(settings.DatabaseName);
 });
+builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IFeatureService, FeatureService>();
 builder.Services.AddScoped<IProductService, ProductService>();
