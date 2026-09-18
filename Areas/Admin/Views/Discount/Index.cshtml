@@ -1,0 +1,274 @@
+﻿@model List<FoodMart.Dtos.DiscountDtos.ResultDiscountDto>
+
+@{
+    ViewData["Title"] = "İndirim Yönetimi";
+
+    var now = DateTime.UtcNow;
+
+    var activeCount = Model.Count(x =>
+        x.IsActive &&
+        x.StartDate <= now &&
+        x.EndDate >= now);
+
+    var expiredCount = Model.Count(x =>
+        x.EndDate < now);
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>İndirim Yönetimi</h1>
+        <p>Kampanyaları ve ürün indirimlerini yönetin.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Discount"
+       asp-action="CreateDiscount"
+       class="admin-btn admin-btn-primary">
+
+        <i class="bi bi-plus-lg"></i>
+        Yeni İndirim
+
+    </a>
+
+</div>
+
+<div class="product-summary-grid">
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon green">
+            <i class="bi bi-percent"></i>
+        </div>
+
+        <div>
+            <span>Toplam İndirim</span>
+            <strong>@Model.Count</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon blue">
+            <i class="bi bi-check-circle"></i>
+        </div>
+
+        <div>
+            <span>Aktif Kampanya</span>
+            <strong>@activeCount</strong>
+        </div>
+    </div>
+
+    <div class="product-summary-card">
+        <div class="product-summary-icon red">
+            <i class="bi bi-clock-history"></i>
+        </div>
+
+        <div>
+            <span>Süresi Dolan</span>
+            <strong>@expiredCount</strong>
+        </div>
+    </div>
+
+</div>
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+
+        <div>
+            <h3>İndirim Listesi</h3>
+            <p>Oluşturulan kampanya ve indirimleri görüntüleyin.</p>
+        </div>
+
+        <div class="table-search">
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="discountSearch"
+                   placeholder="İndirim veya ürün ara..." />
+        </div>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table"
+                   id="discountTable">
+
+                <thead>
+                    <tr>
+                        <th>Kampanya</th>
+                        <th>Ürün</th>
+                        <th>İndirim</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        var isExpired = item.EndDate < now;
+
+                        var isCurrentlyActive =
+                            item.IsActive &&
+                            item.StartDate <= now &&
+                            item.EndDate >= now;
+
+                        <tr>
+
+                            <td>
+                                <div class="feature-table-info">
+
+                                    <div class="feature-table-image">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl"
+                                                 alt="@item.Title" />
+                                        }
+                                        else
+                                        {
+                                            <span class="feature-image-fallback">
+                                                <i class="bi bi-image"></i>
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                    <div class="feature-table-text">
+                                        <strong>@item.Title</strong>
+                                        <span>@item.Description</span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="product-category-badge discount-product-name">
+                                    @item.ProductName
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="discount-rate-badge">
+                                    %@item.DiscountRate
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="discount-date">
+                                    <strong>
+                                        @item.StartDate.ToString("dd.MM.yyyy")
+                                    </strong>
+
+                                    <span>
+                                        @item.EndDate.ToString("dd.MM.yyyy")
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (isCurrentlyActive)
+                                {
+                                    <span class="status-badge success">
+                                        Aktif
+                                    </span>
+                                }
+                                else if (isExpired)
+                                {
+                                    <span class="status-badge inactive">
+                                        Süresi Doldu
+                                    </span>
+                                }
+                                else if (!item.IsActive)
+                                {
+                                    <span class="status-badge inactive">
+                                        Pasif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge">
+                                        Planlandı
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Discount"
+                                       asp-action="UpdateDiscount"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Düzenle">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Discount"
+                                          asp-action="DeleteDiscount"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="delete-discount-form"
+                                          data-discount="@item.Title">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="table-action delete"
+                                                title="Sil">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-percent"></i>
+            </div>
+
+            <h3>Henüz indirim bulunmuyor</h3>
+
+            <p>
+                İlk kampanyanızı oluşturarak başlayabilirsiniz.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Discount"
+               asp-action="CreateDiscount"
+               class="admin-btn admin-btn-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                İlk İndirimi Oluştur
+
+            </a>
+
+        </div>
+    }
+
+</div>

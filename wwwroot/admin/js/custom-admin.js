@@ -458,3 +458,117 @@ document
             }
         });
     });
+
+const discountSearch =
+    document.getElementById("discountSearch");
+
+if (discountSearch) {
+
+    discountSearch.addEventListener("input", function () {
+
+        const searchValue = this.value
+            .toLocaleLowerCase("tr-TR")
+            .trim();
+
+        document
+            .querySelectorAll("#discountTable tbody tr")
+            .forEach(row => {
+
+                const title =
+                    row.querySelector(".feature-table-text strong")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                const product =
+                    row.querySelector(".discount-product-name")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                row.style.display =
+                    title.includes(searchValue) ||
+                        product.includes(searchValue)
+                        ? ""
+                        : "none";
+            });
+    });
+}
+
+
+const discountImageUrl =
+    document.getElementById("discountImageUrl");
+
+const discountPreviewImage =
+    document.getElementById("discountPreviewImage");
+
+const discountPreviewPlaceholder =
+    document.querySelector(".discount-preview-placeholder");
+
+if (discountImageUrl && discountPreviewImage) {
+
+    function updateDiscountPreview() {
+
+        const imageUrl =
+            discountImageUrl.value.trim();
+
+        if (!imageUrl) {
+
+            discountPreviewImage.style.display = "none";
+
+            if (discountPreviewPlaceholder) {
+                discountPreviewPlaceholder.style.display = "flex";
+            }
+
+            return;
+        }
+
+        discountPreviewImage.src = imageUrl;
+    }
+
+    discountPreviewImage.addEventListener(
+        "load",
+        function () {
+
+            this.style.display = "block";
+
+            if (discountPreviewPlaceholder) {
+                discountPreviewPlaceholder.style.display = "none";
+            }
+        });
+
+    discountPreviewImage.addEventListener(
+        "error",
+        function () {
+
+            this.style.display = "none";
+
+            if (discountPreviewPlaceholder) {
+                discountPreviewPlaceholder.style.display = "flex";
+            }
+        });
+
+    discountImageUrl.addEventListener(
+        "input",
+        updateDiscountPreview);
+
+    updateDiscountPreview();
+}
+
+
+document
+    .querySelectorAll(".delete-discount-form")
+    .forEach(form => {
+
+        form.addEventListener("submit", function (event) {
+
+            const discountName =
+                this.dataset.discount ?? "bu indirimi";
+
+            const confirmed = confirm(
+                `"${discountName}" kampanyasını silmek istediğinize emin misiniz?`
+            );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });

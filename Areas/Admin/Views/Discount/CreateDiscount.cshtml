@@ -1,0 +1,274 @@
+﻿@model FoodMart.Dtos.DiscountDtos.CreateDiscountDto
+
+@{
+    ViewData["Title"] = "Yeni İndirim";
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Yeni İndirim</h1>
+        <p>Yeni bir ürün kampanyası oluşturun.</p>
+    </div>
+
+    <a asp-area="Admin"
+       asp-controller="Discount"
+       asp-action="Index"
+       class="admin-btn admin-btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        İndirimlere Dön
+
+    </a>
+
+</div>
+
+<form method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div class="product-form-grid">
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+                    <div class="form-header-icon">
+                        <i class="bi bi-percent"></i>
+                    </div>
+
+                    <div>
+                        <h3>Kampanya Bilgileri</h3>
+                        <p>İndirimin temel bilgilerini girin.</p>
+                    </div>
+                </div>
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="Title">Başlık</label>
+
+                    <div class="admin-input-wrapper">
+                        <i class="bi bi-type-h1"></i>
+
+                        <input asp-for="Title"
+                               class="admin-form-control"
+                               placeholder="Örn: Haftanın Fırsatı" />
+                    </div>
+
+                    <span asp-validation-for="Title"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="Description">Açıklama</label>
+
+                    <textarea asp-for="Description"
+                              class="admin-form-textarea"
+                              rows="4"
+                              placeholder="Kampanya açıklamasını yazın..."></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ProductId">Ürün</label>
+
+                    <select asp-for="ProductId"
+                            asp-items="ViewBag.Products"
+                            class="admin-form-control">
+
+                        <option value="">
+                            Ürün seçiniz
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="ProductId"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="DiscountRate">
+                        İndirim Oranı (%)
+                    </label>
+
+                    <div class="admin-input-wrapper">
+                        <i class="bi bi-percent"></i>
+
+                        <input asp-for="DiscountRate"
+                               type="number"
+                               min="1"
+                               max="100"
+                               class="admin-form-control"
+                               placeholder="20" />
+                    </div>
+
+                    <span asp-validation-for="DiscountRate"
+                          class="text-danger"></span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div>
+                        <h3>Kampanya Süresi</h3>
+                        <p>İndirimin geçerli olacağı tarihleri belirleyin.</p>
+                    </div>
+
+                </div>
+
+                <div class="product-input-row">
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="StartDate">
+                            Başlangıç Tarihi
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="date"
+                               class="admin-form-control" />
+
+                        <span asp-validation-for="StartDate"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="admin-form-group">
+
+                        <label asp-for="EndDate">
+                            Bitiş Tarihi
+                        </label>
+
+                        <input asp-for="EndDate"
+                               type="date"
+                               class="admin-form-control" />
+
+                        <span asp-validation-for="EndDate"
+                              class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-header-icon">
+                        <i class="bi bi-image"></i>
+                    </div>
+
+                    <div>
+                        <h3>Kampanya Görseli</h3>
+                        <p>Banner üzerinde kullanılacak görsel.</p>
+                    </div>
+
+                </div>
+
+                <div class="feature-preview">
+
+                    <div class="discount-preview-placeholder feature-preview-placeholder">
+                        <i class="bi bi-image"></i>
+                        <span>Görsel Önizleme</span>
+                    </div>
+
+                    <img id="discountPreviewImage"
+                         alt="Kampanya görseli"
+                         style="display:none;" />
+
+                </div>
+
+                <div class="admin-form-group">
+
+                    <label asp-for="ImageUrl">
+                        Görsel URL
+                    </label>
+
+                    <div class="admin-input-wrapper">
+
+                        <i class="bi bi-link-45deg"></i>
+
+                        <input asp-for="ImageUrl"
+                               id="discountImageUrl"
+                               class="admin-form-control"
+                               placeholder="/FoodMart-1.0.0/images/..." />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="admin-card product-form-card">
+
+                <label class="admin-switch-row">
+
+                    <div>
+                        <strong>Aktif Kampanya</strong>
+                        <span>
+                            Tarih aralığında ana sayfada gösterilebilir.
+                        </span>
+                    </div>
+
+                    <div class="admin-switch">
+                        <input asp-for="IsActive"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </div>
+
+                </label>
+
+            </div>
+
+            <div class="product-form-actions">
+
+                <a asp-area="Admin"
+                   asp-controller="Discount"
+                   asp-action="Index"
+                   class="admin-btn admin-btn-secondary">
+                    Vazgeç
+                </a>
+
+                <button type="submit"
+                        class="admin-btn admin-btn-primary">
+
+                    <i class="bi bi-check-lg"></i>
+                    İndirimi Kaydet
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

@@ -2140,3 +2140,42 @@ input {
     .feature-preview-placeholder span {
         font-size: 8px;
     }
+
+/* Discount */
+
+.discount-rate-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 11px;
+    color: #5f7f18;
+    background: #f1f8df;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.discount-date {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+    .discount-date strong {
+        color: #465048;
+        font-size: 9px;
+    }
+
+    .discount-date span {
+        color: #969e98;
+        font-size: 8px;
+    }
+
+.delete-discount-form {
+    margin: 0;
+}
+
+    .delete-discount-form button {
+        border: 0;
+        cursor: pointer;
+    }
