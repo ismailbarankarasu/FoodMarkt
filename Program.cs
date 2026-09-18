@@ -1,8 +1,10 @@
 using FoodMart.Services.CategoryServices;
 using FoodMart.Services.DiscountServices;
+using FoodMart.Services.EmailServices;
 using FoodMart.Services.FeatureServices;
 using FoodMart.Services.ProductServices;
 using FoodMart.Services.SaleServices;
+using FoodMart.Services.SubscriberServices;
 using FoodMart.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -33,6 +35,9 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
     return client.GetDatabase(settings.DatabaseName);
 });
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ISubscriberService, SubscriberService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IFeatureService, FeatureService>();

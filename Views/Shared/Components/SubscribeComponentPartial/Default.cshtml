@@ -1,35 +1,159 @@
-﻿<section class="py-5">
+﻿<section class="py-5" id="subscribe">
+
     <div class="container-fluid">
 
-        <div class="bg-secondary py-5 my-5 rounded-5" style="background: url('images/bg-leaves-img-pattern.png') no-repeat;">
+        <div class="bg-secondary py-5 my-5 rounded-5"
+             style="background: url('/FoodMart-1.0.0/images/bg-leaves-img-pattern.png') no-repeat;">
+
             <div class="container my-5">
-                <div class="row">
+
+                <div class="row align-items-center">
+
                     <div class="col-md-6 p-5">
+
                         <div class="section-header">
-                            <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
+
+                            <h2 class="section-title display-4">
+
+                                İlk alışverişinize özel
+
+                                <span class="text-primary">
+                                    %25 İndirim
+                                </span>
+
+                            </h2>
+
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+
+                        <p>
+                            FoodMart kampanyasına katılın,
+                            size özel oluşturulan %25 indirim
+                            kodundan yararlanın.
+                        </p>
+
+                        <p class="text-muted mb-0">
+                            İndirim kodunuz oluşturulduktan sonra
+                            30 gün boyunca geçerlidir.
+                        </p>
+
                     </div>
+
+
                     <div class="col-md-6 p-5">
-                        <form>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text"
-                                       class="form-control form-control-lg" name="name" id="name" placeholder="Name">
+
+                        @if (TempData["SubscribeSuccess"] is not null)
+                        {
+                            <div class="alert alert-success mb-4">
+
+                                <strong>
+                                    @TempData["SubscribeSuccess"]
+                                </strong>
+
+                                @if (TempData["DiscountCode"] is not null)
+                                {
+                                    <div class="mt-3">
+
+                                        İndirim Kodunuz:
+
+                                        <strong class="fs-5 d-block mt-1">
+                                            @TempData["DiscountCode"]
+                                        </strong>
+
+                                    </div>
+                                }
+
                             </div>
-                            <div class="mb-3">
-                                <label for="" class="form-label">Email</label>
-                                <input type="email" class="form-control form-control-lg" name="email" id="email" placeholder="abc@mail.com">
+                        }
+
+
+                        @if (TempData["SubscribeError"] is not null)
+                        {
+                            <div class="alert alert-danger mb-4">
+
+                                @TempData["SubscribeError"]
+
                             </div>
-                            <div class="form-check form-check-inline mb-3">
-                                <label class="form-check-label" for="subscribe">
-                                    <input class="form-check-input" type="checkbox" id="subscribe" value="subscribe">
-                                    Subscribe to the newsletter
+                        }
+
+
+                        <form asp-controller="Subscribe"
+                              asp-action="Create"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+
+                            <div class="mb-3">
+
+                                <label for="subscriberFullName"
+                                       class="form-label">
+
+                                    Ad Soyad
+
                                 </label>
+
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       name="FullName"
+                                       id="subscriberFullName"
+                                       placeholder="Adınız ve soyadınız"
+                                       maxlength="100"
+                                       autocomplete="name"
+                                       required />
+
                             </div>
+
+
+                            <div class="mb-3">
+
+                                <label for="subscriberEmail"
+                                       class="form-label">
+
+                                    E-posta
+
+                                </label>
+
+                                <input type="email"
+                                       class="form-control form-control-lg"
+                                       name="Email"
+                                       id="subscriberEmail"
+                                       placeholder="ornek@mail.com"
+                                       maxlength="150"
+                                       autocomplete="email"
+                                       required />
+
+                            </div>
+
+
+                            <div class="form-check mb-4">
+
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="subscribeAgreement"
+                                       required />
+
+                                <label class="form-check-label"
+                                       for="subscribeAgreement">
+
+                                    Kampanya ve indirim bildirimlerini
+                                    almak istiyorum.
+
+                                </label>
+
+                            </div>
+
+
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-dark btn-lg">Submit</button>
+
+                                <button type="submit"
+                                        class="btn btn-dark btn-lg">
+
+                                    %25 İndirim Kodumu Oluştur
+
+                                </button>
+
                             </div>
+
                         </form>
 
                     </div>
@@ -37,7 +161,9 @@
                 </div>
 
             </div>
+
         </div>
 
     </div>
+
 </section>

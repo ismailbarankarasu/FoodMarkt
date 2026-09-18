@@ -1,0 +1,151 @@
+﻿@model FoodMart.Dtos.SubscriberDtos.GetByIdSubscriberDto
+
+@{
+    ViewData["Title"] = "Abone Detayı";
+
+    var isExpired =
+        Model.ExpiresAt <= DateTime.UtcNow;
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h4 class="mb-1">
+                Abone Detayı
+            </h4>
+
+            <p class="text-muted mb-0">
+                Abonelik ve indirim kodu bilgileri.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Subscriber"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Abonelere Dön
+
+        </a>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-lg-7">
+
+            <div class="admin-content-card">
+
+                <h5 class="mb-4">
+                    Abone Bilgileri
+                </h5>
+
+
+                <div class="mb-4">
+
+                    <label class="text-muted small">
+                        Ad Soyad
+                    </label>
+
+                    <div class="fw-semibold mt-1">
+                        @Model.FullName
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label class="text-muted small">
+                        E-posta
+                    </label>
+
+                    <div class="fw-semibold mt-1">
+                        @Model.Email
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label class="text-muted small">
+                        Kayıt Tarihi
+                    </label>
+
+                    <div class="fw-semibold mt-1">
+                        @Model.CreatedAt.ToLocalTime()
+                        .ToString("dd.MM.yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <label class="text-muted small">
+                        Son Kullanma Tarihi
+                    </label>
+
+                    <div class="fw-semibold mt-1">
+                        @Model.ExpiresAt.ToLocalTime()
+                        .ToString("dd.MM.yyyy HH:mm")
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-5">
+
+            <div class="admin-content-card text-center">
+
+                <span class="text-muted">
+                    İndirim Kodu
+                </span>
+
+                <h3 class="my-3 subscriber-detail-code">
+                    @Model.DiscountCode
+                </h3>
+
+                <div class="display-6 fw-bold text-success mb-3">
+                    %@Model.DiscountRate
+                </div>
+
+
+                @if (Model.IsUsed)
+                {
+                    <span class="badge bg-secondary">
+                        Kullanıldı
+                    </span>
+                }
+                else if (isExpired)
+                {
+                    <span class="badge bg-danger">
+                        Süresi Doldu
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-success">
+                        Kullanılabilir
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

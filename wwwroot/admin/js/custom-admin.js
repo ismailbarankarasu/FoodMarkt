@@ -675,3 +675,62 @@ document
                 }
             });
     });
+
+
+const subscriberSearch =
+    document.getElementById("subscriberSearch");
+
+if (subscriberSearch) {
+
+    subscriberSearch.addEventListener("input", function () {
+
+        const searchValue =
+            this.value
+                .toLocaleLowerCase("tr-TR")
+                .trim();
+
+        document
+            .querySelectorAll("#subscriberTable tbody tr")
+            .forEach(row => {
+
+                const name =
+                    row.querySelector(".subscriber-name")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                const email =
+                    row.querySelector(".subscriber-email")
+                        ?.textContent
+                        .toLocaleLowerCase("tr-TR") ?? "";
+
+                row.style.display =
+                    name.includes(searchValue) ||
+                        email.includes(searchValue)
+                        ? ""
+                        : "none";
+            });
+
+    });
+}
+
+
+document
+    .querySelectorAll(".delete-subscriber-form")
+    .forEach(form => {
+
+        form.addEventListener("submit", function (event) {
+
+            const subscriber =
+                this.dataset.subscriber ?? "bu abone";
+
+            const confirmed = confirm(
+                `"${subscriber}" aboneliğini silmek istediğinize emin misiniz?`
+            );
+
+            if (!confirmed) {
+                event.preventDefault();
+            }
+
+        });
+
+    });

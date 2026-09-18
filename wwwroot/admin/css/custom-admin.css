@@ -2236,3 +2236,128 @@ input {
         color: #a2aaa5;
         font-size: 8px;
     }
+
+/* Subscriber */
+
+.subscriber-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.subscriber-name {
+    color: #404a43;
+    font-size: 10px;
+}
+
+.subscriber-email {
+    color: #8c968f;
+    font-size: 9px;
+}
+
+.subscriber-code {
+    display: inline-flex;
+    padding: 6px 10px;
+    background: #f3f7f4;
+    border-radius: 8px;
+    color: var(--primary);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.subscriber-discount {
+    display: inline-flex;
+    padding: 6px 10px;
+    background: #edf6ef;
+    border-radius: 8px;
+    color: #47634f;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.subscriber-detail-code {
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
+/* Subscriber */
+
+.subscriber-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.subscriber-name {
+    color: #404a43;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.subscriber-email {
+    color: #8c968f;
+    font-size: 9px;
+}
+
+.subscriber-code {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    color: var(--primary);
+    background: #f3f7f4;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.subscriber-discount {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    color: #47634f;
+    background: #edf6ef;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.subscriber-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+    .subscriber-status.active {
+        color: #2f7d44;
+        background: #edf8f0;
+    }
+
+    .subscriber-status.used {
+        color: #59615c;
+        background: #f0f2f1;
+    }
+
+    .subscriber-status.expired {
+        color: #b54444;
+        background: #fff0f0;
+    }
+
+.subscriber-detail-code {
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
+.delete-subscriber-form {
+    margin: 0;
+}
+
+    .delete-subscriber-form button {
+        border: 0;
+        cursor: pointer;
+    }

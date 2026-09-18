@@ -1,0 +1,287 @@
+﻿@model List<FoodMart.Dtos.SubscriberDtos.ResultSubscriberDto>
+
+@{
+    ViewData["Title"] = "Abone Yönetimi";
+
+    var activeCodes = Model.Count(x =>
+        !x.IsUsed &&
+        x.ExpiresAt > DateTime.UtcNow);
+
+    var usedCodes = Model.Count(x => x.IsUsed);
+
+    var expiredCodes = Model.Count(x =>
+        !x.IsUsed &&
+        x.ExpiresAt <= DateTime.UtcNow);
+}
+
+<div class="page-header">
+
+    <div class="page-title-area">
+        <h1>Abone Yönetimi</h1>
+        <p>
+            Aboneleri ve oluşturulan indirim kodlarını yönetin.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="product-summary-grid">
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon green">
+            <i class="bi bi-people"></i>
+        </div>
+
+        <div>
+            <span>Toplam Abone</span>
+            <strong>@Model.Count</strong>
+        </div>
+
+    </div>
+
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon blue">
+            <i class="bi bi-ticket-perforated"></i>
+        </div>
+
+        <div>
+            <span>Aktif Kod</span>
+            <strong>@activeCodes</strong>
+        </div>
+
+    </div>
+
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon green">
+            <i class="bi bi-check-circle"></i>
+        </div>
+
+        <div>
+            <span>Kullanılan Kod</span>
+            <strong>@usedCodes</strong>
+        </div>
+
+    </div>
+
+
+    <div class="product-summary-card">
+
+        <div class="product-summary-icon blue">
+            <i class="bi bi-clock-history"></i>
+        </div>
+
+        <div>
+            <span>Süresi Dolan</span>
+            <strong>@expiredCodes</strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <div class="list-card-header">
+
+        <div>
+            <h3>Aboneler</h3>
+            <p>
+                Kampanya aboneliklerini ve indirim kodlarını görüntüleyin.
+            </p>
+        </div>
+
+
+        <div class="table-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="subscriberSearch"
+                   placeholder="Ad veya e-posta ara..." />
+
+        </div>
+
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table"
+                   id="subscriberTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Abone</th>
+                        <th>İndirim Kodu</th>
+                        <th>İndirim</th>
+                        <th>Kayıt Tarihi</th>
+                        <th>Son Kullanma</th>
+                        <th>Durum</th>
+                        <th class="text-right">İşlemler</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        var isExpired =
+                            item.ExpiresAt <= DateTime.UtcNow;
+
+                        <tr>
+
+                            <td>
+
+                                <div class="subscriber-info">
+
+                                    <strong class="subscriber-name">
+                                        @item.FullName
+                                    </strong>
+
+                                    <span class="subscriber-email">
+                                        @item.Email
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="subscriber-code">
+                                    @item.DiscountCode
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="subscriber-discount">
+                                    %@item.DiscountRate
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                @item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")
+                            </td>
+
+
+                            <td>
+                                @item.ExpiresAt.ToLocalTime().ToString("dd.MM.yyyy")
+                            </td>
+
+
+                            <td>
+
+                                @if (item.IsUsed)
+                                {
+                                    <span class="subscriber-status used">
+                                        <i class="bi bi-check-circle"></i>
+                                        Kullanıldı
+                                    </span>
+                                }
+                                else if (isExpired)
+                                {
+                                    <span class="subscriber-status expired">
+                                        <i class="bi bi-clock-history"></i>
+                                        Süresi Doldu
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="subscriber-status active">
+                                        <i class="bi bi-check-circle"></i>
+                                        Aktif
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Subscriber"
+                                       asp-action="Detail"
+                                       asp-route-id="@item.Id"
+                                       class="table-action edit"
+                                       title="Detay">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Subscriber"
+                                          asp-action="DeleteSubscriber"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="delete-subscriber-form"
+                                          data-subscriber="@item.Email">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="table-action delete"
+                                                title="Sil">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                <i class="bi bi-envelope"></i>
+            </div>
+
+            <h3>
+                Henüz abone bulunmuyor
+            </h3>
+
+            <p>
+                Kullanıcılar yıl dönümü kampanyasına
+                katıldığında abonelik kayıtları burada
+                görüntülenecektir.
+            </p>
+
+        </div>
+    }
+
+</div>

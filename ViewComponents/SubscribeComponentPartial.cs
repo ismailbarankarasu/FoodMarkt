@@ -2,7 +2,7 @@
 
 namespace FoodMart.ViewComponents
 {
-    public class SubscribeComponentPartial:ViewComponent
+    public class SubscribeComponentPartial : ViewComponent
     {
         public IViewComponentResult Invoke()
         {
