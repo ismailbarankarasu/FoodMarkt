@@ -1,10 +1,102 @@
-# FoodMarkt
+# 🛒 FoodMart
 
-ASP.NET Core 10 MVC, MongoDB, Razor ViewComponents ve MailKit kullanan tek projeli mağaza ve yönetim paneli.
+ASP.NET Core 10 MVC ve MongoDB ile geliştirilmiş, dinamik ürün vitrini ve yönetim paneli içeren bir gıda mağazası portföy projesidir. Uygulama ürün, kategori, kampanya, satış ve abone verilerini yönetir; çevrim içi sipariş veya ödeme altyapısı sunmaz.
 
-## Çalıştırma
+## 📌 Proje Hakkında
 
-.NET 10 SDK ve MongoDB gerekir. Varsayılan veritabanı `mongodb://localhost:27017` üzerindeki `FoodMarktDb` veritabanıdır.
+FoodMart; Razor ViewComponent yapısı ile oluşturulmuş dinamik bir ana sayfa, ürün arama ve filtreleme ekranları, ürün detayları ve yetkilendirilmiş bir admin paneli içerir. Dashboard üzerinde ürün, satış, gelir, abone ve kategori istatistikleri sunulur. Ziyaretçiler indirim kampanyasına abone olabilir ve MailKit üzerinden kişisel indirim kodlarını e-posta ile alabilir.
+
+## ✨ Özellikler
+
+- Dinamik ana sayfa, kategori ve ürün vitrinleri
+- Ürün arama, kategori filtreleme ve ürün detay sayfası
+- Kampanya ve çok satan ürün bölümleri
+- Admin paneli ve cookie tabanlı kimlik doğrulama
+- FluentValidation ile Türkçe form doğrulaması
+- JPG, PNG ve WebP görsel yükleme doğrulaması
+- MongoDB indeksleri ve Serilog uygulama günlükleri
+- MailKit ile indirim kodu e-posta akışı
+- SweetAlert2 ile güvenli silme onayları
+
+## 🛍️ Kullanıcı Tarafı
+
+Kullanıcılar ana sayfada aktif kategorileri, güncel ürünleri, kampanyaları ve çok satanları görüntüleyebilir. Ürünler tüm ürünler ekranından, kategori sayfasından veya arama formundan bulunabilir. Ürün detayında kategori, fiyat, indirimli fiyat, stok ve açıklama bilgileri gösterilir. Aktif olmayan ürünler storefront üzerinde yayınlanmaz.
+
+Ana sayfadaki gezinme bağlantıları `#categories`, `#products`, `#discounts`, `#popular-products` ve `#contact` bölümlerine yönelir. Ürün sayfalarından aynı bağlantılar ana sayfaya dönerek ilgili bölüme ulaşır.
+
+## 🛠️ Admin Paneli
+
+`/Admin/Account/Login` adresindeki girişten sonra yetkili kullanıcılar şu bölümleri yönetebilir:
+
+- Dashboard
+- Kategoriler
+- Ürünler
+- Slider özellikleri
+- İndirim kampanyaları
+- Satış kayıtları
+- Aboneler
+- Yönetici oturumu ve çıkış işlemi
+
+Kategori, ürün, özellik, indirim ve satış kayıtları için oluşturma, güncelleme ve silme işlemleri bulunmaktadır. Silme işlemleri yalnızca korumalı POST istekleriyle yapılır.
+
+## 📊 Dashboard
+
+Dashboard; toplam ürün sayısını, toplam satışları, toplam geliri, abone sayısını, son 7 günün satış ve gelir grafiğini, kategori dağılımını, çok satan ürünleri ve son satış kayıtlarını gösterir.
+
+## 🔐 Güvenlik
+
+- Cookie Authentication ve yönetici yetkilendirmesi
+- `PasswordHasher<AdminUser>` ile parola hashleme
+- Global anti-forgery koruması
+- FluentValidation ve sunucu tarafı ModelState doğrulaması
+- Görsel uzantısı, MIME türü, dosya imzası ve 5 MB boyut kontrolü
+- SMTP, yönetici seed ve veritabanı bilgilerinin User Secrets/ortam değişkenleriyle saklanması
+- Üretimde Türkçe, işlem numaralı hata sayfası
+- Serilog ile başarısız giriş ve uygulama hatası günlükleri
+
+## 🧰 Kullanılan Teknolojiler
+
+- .NET 10 ve ASP.NET Core MVC
+- C# ve Razor
+- MongoDB ve MongoDB.Driver
+- Razor ViewComponents
+- FluentValidation
+- MailKit ve MimeKit
+- Serilog.AspNetCore
+- Bootstrap 5 ve Bootstrap Icons
+- jQuery Validation
+- Chart.js
+- SweetAlert2
+- JavaScript ve CSS
+
+## 🏗️ Proje Yapısı
+
+```text
+Areas/Admin       Yönetim paneli görünümleri ve controller'ları
+Controllers       Storefront ve abonelik controller'ları
+Dtos              Form ve sonuç DTO'ları
+Entities          MongoDB belge modelleri
+Services          MongoDB, e-posta, görsel ve iş servisleri
+Validators        FluentValidation kuralları
+ViewComponents    Storefront ve layout bileşenleri
+Views             Razor storefront görünümleri
+wwwroot           CSS, JavaScript, tema ve yüklenen görseller
+Verification      Entegrasyon ve istemci doğrulama araçları
+```
+
+## 🖼️ Görseller
+
+Ekran görüntüleri proje tesliminde `docs/screenshots/` klasörüne eklenebilir. Bu depoda henüz ekran görüntüsü bulunmadığı için uydurma görsel kullanılmamıştır.
+
+## ⚙️ Kurulum
+
+Gereksinimler:
+
+- .NET 10 SDK
+- Yerel veya erişilebilir bir MongoDB sunucusu
+- Gerçek e-posta gönderimi için SMTP hesabı
+
+MongoDB varsayılan olarak `mongodb://localhost:27017` ve `FoodMarktDb` veritabanını kullanır. Ayarlar `appsettings.json` veya ortam değişkenleriyle değiştirilebilir.
 
 ```sh
 dotnet restore
@@ -12,37 +104,42 @@ dotnet build
 dotnet run
 ```
 
-Yönetici girişi: `/Admin/Account/Login`. Giriş sonrası yönetim paneli açılır. Çıkış, başlıktaki POST formuyla yapılır.
-
-İlk yönetici için geliştirme ortamında Visual Studio **Manage User Secrets** üzerinden `AdminSeed:FullName`, `AdminSeed:Email`, `AdminSeed:Password` değerlerini tanımlayın. Uygulama yalnızca `AdminUsers` boşsa hesap oluşturur; parola `PasswordHasher<AdminUser>` ile hashlenir. Seed mevcut hesabın parolasını değiştirmez. İlk kurulumdan sonra seed parolasını kaldırabilirsiniz.
-
-E-posta için `EmailSettings:SenderEmail`, `EmailSettings:Username`, `EmailSettings:Password` değerlerini User Secrets üzerinden tanımlayın. Gmail kullanılıyorsa parola alanı uygulama parolasıdır. Gerçek parolaları appsettings veya kaynak dosyalara yazmayın. Üretimde aynı ayarları ortam değişkenleriyle (`AdminSeed__Email` gibi) veya sunucunun gizli yapılandırma sistemiyle sağlayın. Üretim kimlik doğrulama çerezleri HTTPS gerektirir.
-
-## Formlar ve görseller
-
-Mevcut create/update DTO'ları FluentValidation ile doğrulanır. Asenkron MVC filtresi doğrulama hatalarını ModelState'e aktarır; formlar Türkçe hata özetlerini gösterir. Ürün, satış ve kampanya seçimlerinde ilgili kaydın varlığı da kontrol edilir. Satış toplamı sunucuda hesaplanır.
-
-Ürün, slider ve kampanya formları URL veya dosya kabul eder. JPG, PNG ve WebP için uzantı, MIME türü, dosya imzası ve 5 MB sınırı kontrol edilir. Dosyalar benzersiz adlarla `wwwroot/uploads/images` altında saklanır. Düzenlemede görsel belirtilmezse mevcut görsel korunur. Değiştirme/silme sonrasında başka kayıtta kullanılmayan yerel görseller temizlenir. URL ile bağlanan harici dosyalar silinmez. Yükleme dizinine uygulama hesabının yazma yetkisi olmalı; bu dizini dağıtımlar arasında koruyun ve MongoDB ile birlikte yedekleyin.
-
-Silme işlemleri anti-forgery korumalı POST formlarıdır. SweetAlert2 onay ve başarı mesajları Türkçedir. SweetAlert2 mevcut CDN yaklaşımıyla yüklenir; CDN erişilemezse silme işlemi onaysız çalışmaz.
-
-## İndeksler ve günlükler
-
-İndeksler başlangıçta bir kez, sabit adlarla oluşturulur. Ürün listeleme/kategori filtreleri, slider sıralaması, kampanya filtreleri, satış ve abone tarih sıralamaları kapsanır. Yönetici/abone e-postası ve abone indirim kodu benzersizdir. Kategoriler için mevcut `_id` indeksi yeterlidir; mevcut metin aramasına yararı olmayan bir `Name` indeksi eklenmez.
-
-Mevcut verilerde aynı e-posta veya indirim kodu varsa benzersiz indeks oluşturma başarısız olur ve uygulama başlamaz. Kayıtları inceleyip çakışmaları giderin; başlangıç kodu kullanıcı verisini otomatik silmez veya indeksleri düşürmez. Veritabanı hesabı indeks oluşturabilmelidir.
-
-Serilog konsola beklenmeyen hataları, başarısız girişleri, e-posta hatalarını ve başarılı yönetici işlemlerini yazar. Üretimde konsol çıktısını barındırma ortamınızla saklayın. Üretim hata sayfası veritabanına bağımlı değildir; kullanıcıya Türkçe mesaj ve işlem numarası gösterir.
-
-## Doğrulama
+İlk yönetici hesabını oluşturmak için User Secrets üzerinden şu değerleri tanımlayın:
 
 ```sh
+dotnet user-secrets set "AdminSeed:FullName" "Yönetici"
+dotnet user-secrets set "AdminSeed:Email" "yonetici@example.com"
+dotnet user-secrets set "AdminSeed:Password" "Güçlü-Bir-Parola"
+```
+
+SMTP için `EmailSettings:SenderEmail`, `EmailSettings:Username` ve `EmailSettings:Password` değerlerini User Secrets veya ortam değişkenleriyle sağlayın. Gmail kullanıyorsanız normal hesap parolası yerine uygulama parolası kullanın. Gerçek parolaları kaynak dosyalarına yazmayın.
+
+## 🧪 Test / Doğrulama
+
+```sh
+dotnet restore
+dotnet build
 dotnet run --project Verification/FoodMart.Verification.csproj
 node Verification/client-checks.cjs
 ```
 
-Doğrulama aracı yerel MongoDB'de rastgele isimli `FoodMart_Verification_*` veritabanı ve rastgele parolalı bir yönetici oluşturur, HTTP üzerinden uygulamayı `localhost:5189` adresinde test eder ve sonunda geçici veritabanını siler. Bu port boş olmalıdır. Gerçek uygulama veritabanını kullanmaz. Gerçek e-posta göndermez; e-posta hatası ve kayıt geri alma akışını kontrol eder. İlk geçerli SMTP gönderimini kendi yapılandırmanızla ayrıca doğrulayın.
+Verification projesi geçici bir MongoDB veritabanı oluşturur ve kimlik doğrulama, CSRF, CRUD, görsel yükleme, storefront sayfaları, navigation anchor'ları, dashboard ve üretim hata sayfasını kontrol eder. SMTP ayarları eksik bırakıldığı için gerçek e-posta göndermez; abonelikteki rollback davranışını doğrular. `client-checks.cjs` SweetAlert2 onay, iptal ve CDN yokkenki form davranışını test eder.
 
-Kontroller giriş/çıkış, yetkilendirme, CSRF, CRUD, Türkçe doğrulama, yükleme, görsel koruma/temizleme, indeksler, mağaza sayfaları, dashboard ve üretim hata sayfasını kapsar. JavaScript kontrolü onay/iptal davranışını doğrular; görsel tarayıcı testi yerine geçmez.
+## 📧 MailKit
 
-Uygulama yaklaşımı için: [FluentValidation ASP.NET entegrasyonu](https://docs.fluentvalidation.net/en/latest/aspnet.html), [Serilog ASP.NET Core](https://github.com/serilog/serilog-aspnetcore), [SweetAlert2](https://sweetalert2.github.io/).
+Abonelik formu önce benzersiz indirim kodu oluşturur, ardından MailKit ile SMTP üzerinden kullanıcıya gönderir. SMTP ayarları eksik veya gönderim başarısızsa işlem hata olarak ele alınır ve oluşturulan abone kaydı temizlenir. Başarılı akışta kod 30 gün geçerlidir.
+
+## 📁 Görsel Yükleme
+
+Ürün, özellik ve kampanya görsellerinde JPG, PNG ve WebP desteklenir. Dosyalar en fazla 5 MB olabilir; uzantı, MIME türü ve gerçek dosya imzası kontrol edilir. Geçerli dosyalar benzersiz adlarla `wwwroot/uploads/images` altında saklanır. Değiştirilen veya artık kullanılmayan yerel görseller temizlenir.
+
+## 🗃️ MongoDB
+
+Başlıca koleksiyonlar `AdminUsers`, `Categories`, `Products`, `Features`, `Discounts`, `Sales` ve `Subscribers` koleksiyonlarıdır. Uygulama başlangıcında ürün, kategori, kampanya, satış, yönetici ve abone sorguları için gerekli indeksler oluşturulur.
+
+## 👨‍💻 Developer
+
+İsmail Baran KARASU
+GitHub: <https://github.com/ismailbarankarasu>
+
+Tema kaynaklı görsel ve tasarım varlıkları için mevcut [TemplatesJungle](https://templatesjungle.com/) atıfları korunmuştur.
