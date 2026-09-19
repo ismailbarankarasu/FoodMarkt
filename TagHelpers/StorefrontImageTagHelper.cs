@@ -10,6 +10,8 @@ namespace FoodMart.TagHelpers;
 [HtmlTargetElement("img", Attributes = "src", TagStructure = TagStructure.WithoutEndTag)]
 public sealed class StorefrontImageTagHelper(IWebHostEnvironment environment, IUrlHelperFactory urls) : TagHelper
 {
+    // Inspect the original URL before MVC's URL resolution helper wraps its output.
+    public override int Order => -2000;
     [ViewContext, HtmlAttributeNotBound]
     public ViewContext ViewContext { get; set; } = null!;
 
