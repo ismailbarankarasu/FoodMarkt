@@ -79,6 +79,7 @@ builder.Services
     });
 
 builder.Services.AddScoped<FoodMart.Services.ImageServices.ImageService>();
+builder.Services.AddScoped<FoodMart.Services.MongoIndexService>();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -115,6 +116,7 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
+    await scope.ServiceProvider.GetRequiredService<FoodMart.Services.MongoIndexService>().InitializeAsync();
     var adminAuthService =
         scope.ServiceProvider
             .GetRequiredService<IAdminAuthService>();
