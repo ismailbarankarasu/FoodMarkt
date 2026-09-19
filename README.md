@@ -9,6 +9,7 @@ FoodMart; Razor ViewComponent yapısı ile oluşturulmuş dinamik bir ana sayfa,
 ## ✨ Özellikler
 
 - Dinamik ana sayfa, kategori ve ürün vitrinleri
+- Ziyaretçiye özel sepet, adet güncelleme ve güncel fiyat/stok kontrolü
 - Ürün arama, kategori filtreleme ve ürün detay sayfası
 - Kampanya ve çok satan ürün bölümleri
 - Admin paneli ve cookie tabanlı kimlik doğrulama
@@ -23,6 +24,14 @@ FoodMart; Razor ViewComponent yapısı ile oluşturulmuş dinamik bir ana sayfa,
 Kullanıcılar ana sayfada aktif kategorileri, güncel ürünleri, kampanyaları ve çok satanları görüntüleyebilir. Ürünler tüm ürünler ekranından, kategori sayfasından veya arama formundan bulunabilir. Ürün detayında kategori, fiyat, indirimli fiyat, stok ve açıklama bilgileri gösterilir. Aktif olmayan ürünler storefront üzerinde yayınlanmaz.
 
 Ana sayfadaki gezinme bağlantıları `#categories`, `#products`, `#discounts`, `#popular-products` ve `#contact` bölümlerine yönelir. Ürün sayfalarından aynı bağlantılar ana sayfaya dönerek ilgili bölüme ulaşır.
+
+## 🛒 Sepet
+
+Ürün kartlarından ve ürün detayından **Sepete Ekle** düğmesiyle ürün eklenebilir. Header'daki sepet bağlantısı ürün adedini ve toplam tutarı gösterir. `/Cart` ekranında adet güncellenebilir, ürün çıkarılabilir veya sepet temizlenebilir.
+
+Sepette yalnızca ürün kimliği ve adet sunucu oturumunda saklanır. Fiyat ve indirimler her istekte MongoDB'den okunur; pasif veya stoksuz ürünler çıkarılır, azalan stoğa göre adet düzeltilir. Tüm değişiklikler anti-forgery korumalı POST işlemleridir. Sepet stok ayırmaz ve sipariş/ödeme oluşturmaz.
+
+Oturum 24 saat hareketsizlikte sona erer. Mevcut tek sunucu kurulumunda bellek içi oturum kullanılır; uygulama yeniden başlatıldığında sepetler sıfırlanır. Sepetler ziyaretçi çereziyle birbirinden ayrılır. Her ürün için en fazla 99 adet, toplamda 50 farklı ürün desteklenir.
 
 ## 🛠️ Admin Paneli
 
