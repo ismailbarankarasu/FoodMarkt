@@ -24,6 +24,15 @@ namespace FoodMart.Services.EmailServices
             int discountRate,
             DateTime expiresAt)
         {
+            if (string.IsNullOrWhiteSpace(_emailSettings.SmtpServer) ||
+                _emailSettings.SmtpPort <= 0 ||
+                string.IsNullOrWhiteSpace(_emailSettings.SenderEmail) ||
+                string.IsNullOrWhiteSpace(_emailSettings.Username) ||
+                string.IsNullOrWhiteSpace(_emailSettings.Password))
+            {
+                throw new InvalidOperationException("E-posta gönderimi için SMTP ayarları eksik.");
+            }
+
             var message = new MimeMessage();
 
             message.From.Add(
