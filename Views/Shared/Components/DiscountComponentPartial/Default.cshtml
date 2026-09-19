@@ -1,56 +1,30 @@
 ﻿@model List<FoodMart.Dtos.DiscountDtos.ResultDiscountDto>
-
-@if (Model.Any())
-{
-    <section class="py-5">
-        <div class="container-fluid">
-            <div class="row">
-
+<section id="discounts" class="py-5">
+    <div class="container-fluid">
+        <h2 class="section-title mb-4">Güncel Kampanyalar</h2>
+        @if (Model.Any())
+        {
+            <div class="row g-4">
                 @for (var i = 0; i < Model.Count; i++)
                 {
                     var item = Model[i];
-
-                    var backgroundClass = i % 2 == 0
-                        ? "bg-danger"
-                        : "bg-info";
-
                     <div class="col-md-6">
-
-                        <div class="banner-ad @backgroundClass mb-3"
-                             style="background-image: url('@item.ImageUrl');
-                            background-repeat: no-repeat;
-                            background-position: right bottom;
-                            background-size: contain;">
-
-                            <div class="banner-content p-5">
-
-                                <div class="categories text-primary fs-3 fw-bold">
-                                    %@item.DiscountRate İndirim
-                                </div>
-
-                                <h3 class="banner-title">
-                                    @item.Title
-                                </h3>
-
-                                <p>
-                                    @item.Description
-                                </p>
-
-                                <a asp-controller="Product"
-                                   asp-action="Detail"
-                                   asp-route-id="@item.ProductId"
-                                   class="btn btn-dark text-uppercase">
-                                    Ürünü İncele
-                                </a>
-
+                        <article class="banner-ad campaign-card @(i % 2 == 0 ? "bg-danger" : "bg-info") h-100">
+                            <div class="banner-content p-4">
+                                <span class="categories text-primary fs-3 fw-bold">%@item.DiscountRate İndirim</span>
+                                <h3 class="banner-title">@item.Title</h3>
+                                <p>@item.Description</p>
+                                <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-dark">Ürünü incele</a>
                             </div>
-
-                        </div>
-
+                            <img src="@item.ImageUrl" alt="@item.Title" loading="lazy" class="campaign-image" />
+                        </article>
                     </div>
                 }
-
             </div>
-        </div>
-    </section>
-}
+        }
+        else
+        {
+            <p class="text-muted">Şu anda aktif kampanya bulunmuyor. Yeni fırsatlar için tekrar ziyaret edin.</p>
+        }
+    </div>
+</section>

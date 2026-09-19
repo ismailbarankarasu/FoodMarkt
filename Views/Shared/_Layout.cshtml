@@ -1,25 +1,15 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-@await Component.InvokeAsync("_LayoutHeadComponentPartial");
-<body>
-
-    @await Component.InvokeAsync("_LayoutLogoComponentPartial");
-
-    <div class="preloader-wrapper">
-        <div class="preloader">
-        </div>
-    </div>
-
-    @await Component.InvokeAsync("BasketComponentPartial")
-
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_LayoutHeadComponentPartial")
+<body id="home" data-image-fallback="@Url.Content("~/images/image-unavailable.svg")">
+    <a class="skip-link" href="#main-content">İçeriğe geç</a>
+    @await Component.InvokeAsync("_LayoutLogoComponentPartial")
     @await Component.InvokeAsync("MobilSearchComponentPartial")
-
     @await Component.InvokeAsync("_LayoutHeaderComponentPartial")
-
-    @RenderBody();
-
+    <main id="main-content" tabindex="-1">
+        @RenderBody()
+    </main>
     @await Component.InvokeAsync("_LayoutFooterComponentPartial")
-
     @await Component.InvokeAsync("_LayoutScriptsComponentPartial")
 </body>
 </html>

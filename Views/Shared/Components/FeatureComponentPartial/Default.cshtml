@@ -1,5 +1,5 @@
 ﻿@model List<FoodMart.Dtos.FeatureDtos.ResultFeatureDto>
-<section class="py-3" style="background-image: url('/FoodMart-1.0.0/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
+<section aria-label="Öne çıkanlar" class="py-3" style="background-image: url('/FoodMart-1.0.0/images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -34,9 +34,9 @@
                                                         @item.Description
                                                     </p>
 
-                                                    @if (!string.IsNullOrWhiteSpace(item.ButtonText))
+                                                    @if (!string.IsNullOrWhiteSpace(item.ButtonText) && FoodMart.Validators.FormRules.SafeUrl(item.ButtonUrl))
                                                     {
-                                                        <a href="@item.ButtonUrl"
+                                                        <a href="@Url.Content(item.ButtonUrl)"
                                                            class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">
 
                                                             @item.ButtonText
@@ -106,7 +106,7 @@
                             <div class="content-wrapper col-md-7">
                                 <div class="categories sale mb-3 pb-3">Taze seçenekler</div>
                                 <h3 class="banner-title">Ürünlerimizi keşfedin</h3>
-                                <a href="/Product" class="d-flex align-items-center nav-link">Ürünleri incele <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
+                                <a asp-controller="Product" asp-action="Index" class="d-flex align-items-center nav-link">Ürünleri incele <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
                             </div>
 
                         </div>
@@ -118,7 +118,7 @@
                             <div class="content-wrapper col-md-7">
                                 <div class="categories sale mb-3 pb-3">Her gün taze</div>
                                 <h3 class="item-title">Sofranız için</h3>
-                                <a href="/Product" class="d-flex align-items-center nav-link">Ürünleri incele <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
+                                <a asp-controller="Product" asp-action="Index" class="d-flex align-items-center nav-link">Ürünleri incele <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
                             </div>
 
                         </div>

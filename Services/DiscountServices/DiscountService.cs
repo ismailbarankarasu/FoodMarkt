@@ -32,10 +32,13 @@ namespace FoodMart.Services.DiscountServices
                 return [];
 
             var now = DateTime.UtcNow;
+            var activeProductIds = await _productCollection.Find(x => x.IsActive)
+                .Project(x => x.Id).ToListAsync();
 
             var discounts = await _discountCollection
                 .Find(x =>
                     x.IsActive &&
+                    activeProductIds.Contains(x.ProductId) &&
                     x.StartDate <= now &&
                     x.EndDate >= now)
                 .SortByDescending(x => x.DiscountRate)

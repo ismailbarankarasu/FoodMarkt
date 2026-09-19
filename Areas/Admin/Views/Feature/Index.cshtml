@@ -1,7 +1,7 @@
 ﻿@model List<FoodMart.Dtos.FeatureDtos.ResultFeatureDto>
 
 @{
-    ViewData["Title"] = "Slider Yönetimi";
+    ViewData["Title"] = "Slayt Yönetimi";
 
     var activeCount = Model.Count(x => x.IsActive);
     var passiveCount = Model.Count(x => !x.IsActive);
@@ -9,8 +9,8 @@
 
 <div class="page-header">
     <div class="page-title-area">
-        <h1>Slider Yönetimi</h1>
-        <p>Ana sayfada gösterilecek slider içeriklerini yönetin.</p>
+        <h1>Slayt Yönetimi</h1>
+        <p>Ana sayfada gösterilecek slayt içeriklerini yönetin.</p>
     </div>
 
     <a asp-area="Admin"
@@ -18,7 +18,7 @@
        asp-action="CreateFeature"
        class="admin-btn admin-btn-primary">
         <i class="bi bi-plus-lg"></i>
-        Yeni Slider
+        Yeni Slayt
     </a>
 </div>
 
@@ -29,7 +29,7 @@
             <i class="bi bi-images"></i>
         </div>
         <div>
-            <span>Toplam Slider</span>
+            <span>Toplam Slayt</span>
             <strong>@Model.Count</strong>
         </div>
     </div>
@@ -60,8 +60,8 @@
 
     <div class="list-card-header">
         <div>
-            <h3>Slider Listesi</h3>
-            <p>Sliderlar gösterim sırasına göre listelenmektedir.</p>
+            <h3>Slayt Listesi</h3>
+            <p>Slaytlar gösterim sırasına göre listelenmektedir.</p>
         </div>
 
         <div class="table-search">
@@ -69,7 +69,7 @@
 
             <input type="text"
                    id="featureSearch"
-                   placeholder="Slider ara..." />
+                   placeholder="Slayt ara..." />
         </div>
     </div>
 
@@ -80,7 +80,7 @@
             <table class="admin-table" id="featureTable">
                 <thead>
                     <tr>
-                        <th>Slider</th>
+                        <th>Slayt</th>
                         <th>Buton</th>
                         <th>Sıra</th>
                         <th>Durum</th>
@@ -204,10 +204,10 @@
                 <i class="bi bi-images"></i>
             </div>
 
-            <h3>Henüz slider bulunmuyor</h3>
+            <h3>Henüz slayt bulunmuyor</h3>
 
             <p>
-                Ana sayfada göstermek istediğiniz ilk slider
+                Ana sayfada göstermek istediğiniz ilk slayt
                 içeriğini oluşturabilirsiniz.
             </p>
 
@@ -216,7 +216,7 @@
                asp-action="CreateFeature"
                class="admin-btn admin-btn-primary">
                 <i class="bi bi-plus-lg"></i>
-                İlk Sliderı Oluştur
+                İlk Slaytı Oluştur
             </a>
 
         </div>

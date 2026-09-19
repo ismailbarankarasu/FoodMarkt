@@ -1,6 +1,6 @@
 ﻿@model List<FoodMart.Dtos.ProductDtos.ResultProductDto>
 
-<section class="py-5">
+<section id="products" class="py-5">
     <div class="container-fluid">
 
         <div class="row">
@@ -46,18 +46,9 @@
                                 <span class="badge bg-success position-absolute m-3">
                                     -%@discountRate
                                 </span>
-                            }
+                                    }
 
-                            <a href="#"
-                               class="btn-wishlist">
-
-                                <svg width="24" height="24">
-                                    <use xlink:href="#heart"></use>
-                                </svg>
-
-                            </a>
-
-                            <figure>
+                                    <figure>
 
                                 <a asp-controller="Product"
                                    asp-action="Detail"
@@ -111,11 +102,11 @@
                                 <div class="d-flex align-items-center gap-2 mb-3">
 
                                     <span class="price">
-                                        @item.DiscountPrice.Value.ToString("N2") ₺
+                                        @item.DiscountPrice.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                     </span>
 
                                     <span class="text-muted text-decoration-line-through">
-                                        @item.Price.ToString("N2") ₺
+                                        @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                     </span>
 
                                 </div>
@@ -123,64 +114,13 @@
                             else
                             {
                                 <span class="price">
-                                    @item.Price.ToString("N2") ₺
+                                    @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                 </span>
                             }
 
                             @if (item.Stock > 0)
                             {
-                                <div class="d-flex align-items-center justify-content-between">
-
-                                    <div class="input-group product-qty">
-
-                                        <span class="input-group-btn">
-
-                                            <button type="button"
-                                                    class="quantity-left-minus btn btn-danger btn-number"
-                                                    data-type="minus">
-
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#minus"></use>
-                                                </svg>
-
-                                            </button>
-
-                                        </span>
-
-                                        <input type="text"
-                                               name="quantity"
-                                               class="form-control input-number"
-                                               value="1"
-                                               min="1"
-                                               max="@item.Stock">
-
-                                        <span class="input-group-btn">
-
-                                            <button type="button"
-                                                    class="quantity-right-plus btn btn-success btn-number"
-                                                    data-type="plus">
-
-                                                <svg width="16" height="16">
-                                                    <use xlink:href="#plus"></use>
-                                                </svg>
-
-                                            </button>
-
-                                        </span>
-
-                                    </div>
-
-                                    <a href="#"
-                                       class="nav-link">
-
-                                        Sepete Ekle
-
-                                        <iconify-icon icon="uil:shopping-cart">
-                                        </iconify-icon>
-
-                                    </a>
-
-                                </div>
+                                <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-dark mt-3">Ürünü incele</a>
                             }
                             else
                             {

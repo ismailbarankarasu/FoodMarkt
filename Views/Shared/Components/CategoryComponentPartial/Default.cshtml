@@ -1,26 +1,23 @@
 ﻿@model List<FoodMart.Dtos.CategoryDtos.ResultCategoryDto>
 
-<section class="py-5 overflow-hidden">
+<section id="categories" class="py-5 overflow-hidden">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
 
                 <div class="section-header d-flex flex-wrap justify-content-between mb-5">
-                    <h2 class="section-title">Category</h2>
+                    <h2 class="section-title">Kategoriler</h2>
 
                     <div class="d-flex align-items-center">
 
-                        <a href="#"
-                           class="btn-link text-decoration-none">
-                            View All Categories →
-                        </a>
+                        <a asp-controller="Product" asp-action="Index" class="btn-link text-decoration-none">Tüm ürünleri gör →</a>
 
                         <div class="swiper-buttons">
-                            <button class="swiper-prev category-carousel-prev btn btn-yellow">
+                            <button type="button" aria-label="Önceki kategoriler" class="swiper-prev category-carousel-prev btn btn-yellow">
                                 ❮
                             </button>
 
-                            <button class="swiper-next category-carousel-next btn btn-yellow">
+                            <button type="button" aria-label="Sonraki kategoriler" class="swiper-next category-carousel-next btn btn-yellow">
                                 ❯
                             </button>
                         </div>

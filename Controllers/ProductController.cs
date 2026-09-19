@@ -1,5 +1,7 @@
 ﻿using FoodMart.Dtos.ProductDtos;
 using FoodMart.Services.ProductServices;
+using FoodMart.Services.CategoryServices;
+using MongoDB.Bson;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodMart.Controllers
@@ -7,10 +9,12 @@ namespace FoodMart.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -28,18 +32,13 @@ namespace FoodMart.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return RedirectToAction(nameof(Index));
 
+            var category = await _categoryService.GetByIdAsync(id);
+            if (category is null) return NotFound();
             var products = await _productService.GetProductsByCategoryAsync(id);
 
             ViewBag.CategoryId = id;
 
-            if (products.Any())
-            {
-                ViewBag.CategoryName = products.First().CategoryName;
-            }
-            else
-            {
-                ViewBag.CategoryName = "Kategori";
-            }
+            ViewBag.CategoryName = category.Name;
 
             return View(products);
         }
@@ -47,6 +46,7 @@ namespace FoodMart.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(string? search, string? categoryId)
         {
+            if (!string.IsNullOrWhiteSpace(categoryId) && !ObjectId.TryParse(categoryId, out _)) return NotFound();
             var products =
                 string.IsNullOrWhiteSpace(search)
                     ? await _productService.GetAllAsync()
@@ -77,6 +77,8 @@ namespace FoodMart.Controllers
             if (product is null || !product.IsActive)
                 return NotFound();
 
+            var category = await _categoryService.GetByIdAsync(product.CategoryId);
+            ViewBag.CategoryName = category?.Name ?? "Kategori";
             return View(product);
         }
     }

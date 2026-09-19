@@ -3,7 +3,7 @@
 @model DashboardDto
 
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Genel Bakış";
 
     var salesChartData = Model.Last7DaysSales
         .Select(x => new
@@ -29,13 +29,13 @@
 </script>
 <div class="page-header">
     <div class="page-title-area">
-        <h1>Dashboard</h1>
+        <h1>Genel Bakış</h1>
         <p>FoodMart mağazanızın performansını ve güncel durumunu buradan takip edebilirsiniz.</p>
     </div>
 
     <div class="dashboard-date-badge">
         <i class="bi bi-calendar-check"></i>
-        <span>@DateTime.Now.ToString("dd MMMM yyyy")</span>
+        <span>@DateTime.Now.ToString("dd MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</span>
     </div>
 </div>
 
@@ -73,7 +73,7 @@
         <div class="stat-content">
             <span class="stat-label">Toplam Satış</span>
 
-            <h3>@Model.TotalSalesQuantity.ToString("N0")</h3>
+            <h3>@Model.TotalSalesQuantity.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</h3>
 
             <p>
                 Bu ay
@@ -94,11 +94,11 @@
         <div class="stat-content">
             <span class="stat-label">Toplam Gelir</span>
 
-            <h3>₺@Model.TotalRevenue.ToString("N2")</h3>
+            <h3>₺@Model.TotalRevenue.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</h3>
 
             <p>
                 Bu ay
-                <strong>₺@Model.RevenueThisMonth.ToString("N2")</strong>
+                <strong>₺@Model.RevenueThisMonth.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</strong>
                 gelir elde edildi
             </p>
         </div>
@@ -115,7 +115,7 @@
         <div class="stat-content">
             <span class="stat-label">Bülten Abonesi</span>
 
-            <h3>@Model.TotalSubscribers.ToString("N0")</h3>
+            <h3>@Model.TotalSubscribers.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</h3>
 
             <p>
                 Son 7 günde
@@ -174,7 +174,7 @@
             <canvas id="categoryChart"></canvas>
 
             <div class="donut-center">
-                <strong>@Model.TotalSalesQuantity.ToString("N0")</strong>
+                <strong>@Model.TotalSalesQuantity.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</strong>
                 <span>Satış</span>
             </div>
         </div>
@@ -290,7 +290,7 @@
 
                                 <td>
                                     <strong>
-                                        ₺@sale.TotalPrice.ToString("N2")
+                                        ₺@sale.TotalPrice.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))
                                     </strong>
                                 </td>
 

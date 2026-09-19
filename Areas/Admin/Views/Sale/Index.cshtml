@@ -57,7 +57,7 @@
 
         <div>
             <span>Toplam Ciro</span>
-            <strong>@totalRevenue.ToString("N2") ₺</strong>
+            <strong>@totalRevenue.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺</strong>
         </div>
     </div>
 
@@ -119,12 +119,12 @@
                             </td>
 
                             <td>
-                                @item.UnitPrice.ToString("N2") ₺
+                                @item.UnitPrice.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                             </td>
 
                             <td>
                                 <strong class="sale-total-price">
-                                    @item.TotalPrice.ToString("N2") ₺
+                                    @item.TotalPrice.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                 </strong>
                             </td>
 

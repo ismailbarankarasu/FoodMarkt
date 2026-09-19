@@ -183,17 +183,17 @@
                                          item.DiscountPrice.Value < item.Price)
                                     {
                                         <strong>
-                                            ₺@item.DiscountPrice.Value.ToString("N2")
+                                            ₺@item.DiscountPrice.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))
                                         </strong>
 
                                         <del>
-                                            ₺@item.Price.ToString("N2")
+                                            ₺@item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))
                                         </del>
                                     }
                                     else
                                     {
                                         <strong>
-                                            ₺@item.Price.ToString("N2")
+                                            ₺@item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))
                                         </strong>
                                     }
 

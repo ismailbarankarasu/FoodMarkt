@@ -1,13 +1,13 @@
 ﻿@model FoodMart.Dtos.FeatureDtos.CreateFeatureDto
 
 @{
-    ViewData["Title"] = "Yeni Slider";
+    ViewData["Title"] = "Yeni Slayt";
 }
 
 <div class="page-header">
     <div class="page-title-area">
-        <h1>Yeni Slider</h1>
-        <p>Ana sayfada gösterilecek yeni slider içeriğini oluşturun.</p>
+        <h1>Yeni Slayt</h1>
+        <p>Ana sayfada gösterilecek yeni slayt içeriğini oluşturun.</p>
     </div>
 
     <a asp-area="Admin"
@@ -15,7 +15,7 @@
        asp-action="Index"
        class="admin-btn admin-btn-secondary">
         <i class="bi bi-arrow-left"></i>
-        Sliderlara Dön
+        Slaytlara Dön
     </a>
 </div>
 
@@ -35,7 +35,7 @@
                     </div>
 
                     <div>
-                        <h3>Slider İçeriği</h3>
+                        <h3>Slayt İçeriği</h3>
                         <p>Başlık ve açıklama bilgilerini girin.</p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <textarea asp-for="Description"
                               class="admin-form-textarea"
                               rows="5"
-                              placeholder="Slider açıklamasını yazın..."></textarea>
+                              placeholder="Slayt açıklamasını yazın..."></textarea>
                 </div>
 
             </div>
@@ -72,7 +72,7 @@
 
                     <div>
                         <h3>Buton Ayarları</h3>
-                        <p>Slider üzerindeki aksiyon butonunu yapılandırın.</p>
+                        <p>Slayt üzerindeki aksiyon butonunu yapılandırın.</p>
                     </div>
                 </div>
 
@@ -131,8 +131,8 @@
                     </div>
 
                     <div>
-                        <h3>Slider Görseli</h3>
-                        <p>Slider için kullanılacak görseli belirleyin.</p>
+                        <h3>Slayt Görseli</h3>
+                        <p>Slayt için kullanılacak görseli belirleyin.</p>
                     </div>
                 </div>
 
@@ -140,11 +140,11 @@
 
                     <div class="feature-preview-placeholder">
                         <i class="bi bi-images"></i>
-                        <span>Slider Önizleme</span>
+                        <span>Slayt Önizleme</span>
                     </div>
 
                     <img id="featurePreviewImage"
-                         alt="Slider önizleme"
+                         alt="Slayt önizleme"
                          style="display:none;" />
 
                 </div>
@@ -178,14 +178,14 @@
 
                     <div>
                         <h3>Yayın Durumu</h3>
-                        <p>Sliderın ana sayfada görüntülenmesini yönetin.</p>
+                        <p>Slaytın ana sayfada görüntülenmesini yönetin.</p>
                     </div>
                 </div>
 
                 <label class="admin-switch-row">
 
                     <div>
-                        <strong>Aktif Slider</strong>
+                        <strong>Aktif Slayt</strong>
                         <span>Ana sayfada gösterilsin.</span>
                     </div>
 
@@ -210,7 +210,7 @@
                 <button type="submit"
                         class="admin-btn admin-btn-primary">
                     <i class="bi bi-check-lg"></i>
-                    Sliderı Kaydet
+                    Slaytı Kaydet
                 </button>
 
             </div>

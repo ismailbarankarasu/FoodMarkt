@@ -94,17 +94,17 @@
                     @if (hasDiscount)
                     {
                         <span class="fs-2 fw-bold text-primary">
-                            @Model.DiscountPrice!.Value.ToString("N2") ₺
+                            @Model.DiscountPrice!.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                         </span>
 
                         <span class="fs-5 text-muted text-decoration-line-through ms-3">
-                            @Model.Price.ToString("N2") ₺
+                            @Model.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                         </span>
                     }
                     else
                     {
                         <span class="fs-2 fw-bold text-primary">
-                            @Model.Price.ToString("N2") ₺
+                            @Model.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                         </span>
                     }
 
@@ -135,76 +135,10 @@
                 </div>
 
 
-                @if (Model.Stock > 0)
-                {
-                    <div class="d-flex flex-wrap align-items-center gap-3">
-
-                        <div class="input-group product-qty"
-                             style="width: 140px;">
-
-                            <button type="button"
-                                    class="quantity-left-minus btn btn-danger btn-number"
-                                    data-type="minus">
-
-                                <svg width="16" height="16">
-                                    <use xlink:href="#minus"></use>
-                                </svg>
-
-                            </button>
-
-                            <input type="text"
-                                   name="quantity"
-                                   class="form-control input-number text-center"
-                                   value="1"
-                                   min="1"
-                                   max="@Model.Stock" />
-
-                            <button type="button"
-                                    class="quantity-right-plus btn btn-success btn-number"
-                                    data-type="plus">
-
-                                <svg width="16" height="16">
-                                    <use xlink:href="#plus"></use>
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-
-                        <a href="#"
-                           class="btn btn-primary btn-lg px-4">
-
-                            <iconify-icon icon="uil:shopping-cart">
-                            </iconify-icon>
-
-                            Sepete Ekle
-
-                        </a>
-
-
-                        <a href="#"
-                           class="btn btn-outline-secondary btn-lg"
-                           title="Favorilere Ekle">
-
-                            <svg width="22" height="22">
-                                <use xlink:href="#heart"></use>
-                            </svg>
-
-                        </a>
-
-                    </div>
-                }
-                else
-                {
-                    <button type="button"
-                            class="btn btn-secondary btn-lg"
-                            disabled>
-
-                        Ürün Stokta Yok
-
-                    </button>
-                }
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="Product" asp-action="Category" asp-route-id="@Model.CategoryId" class="btn btn-primary">@ViewBag.CategoryName ürünleri</a>
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-outline-dark">Tüm ürünlere dön</a>
+                </div>
 
             </div>
 

@@ -108,6 +108,8 @@ try
     Check((await Post("/Admin/Product/UpdateProduct", new(productFields), "/Admin/Product/UpdateProduct/" + product.Id, png)).StatusCode == HttpStatusCode.Redirect, "Image replacement");
     product = await database.GetCollection<Product>("Products").Find(x => x.Id == product.Id).SingleAsync();
     Check(product.ImageUrl != oldImage && !File.Exists(Path.Combine(root, "wwwroot", oldImage.TrimStart('/'))), "Replaced image cleaned up");
+    await database.GetCollection<Product>("Products").UpdateOneAsync(x => x.Id == product.Id,
+        Builders<Product>.Update.Set(x => x.Price, 1234.5m).Set(x => x.DiscountPrice, 1000.25m));
     foreach (var entity in new[] { "Feature", "Discount", "Sale" })
     {
         var fields = entity switch
@@ -125,6 +127,34 @@ try
     }
     Check((await database.GetCollection<Sale>("Sales").Find(_ => true).SingleAsync()).TotalPrice == 20, "Sale total ignores client TotalPrice");
     foreach (var path in new[] { "/", "/Product", "/Product/Search?search=Test", "/Product/Category/" + category.Id, "/Product/Detail/" + product.Id, "/Admin/Dashboard", "/Admin/Subscriber" }) await Get(path);
+    var homepage = WebUtility.HtmlDecode(await Get("/"));
+    foreach (var anchor in new[] { "home", "categories", "products", "discounts", "popular-products", "contact" })
+        Check(Regex.Matches(homepage, $"id=\"{anchor}\"").Count == 1, "Unique homepage anchor: " + anchor);
+    foreach (var path in new[] { "/", "/Product", "/Product/Search?search=Test", "/Product/Category/" + category.Id, "/Product/Detail/" + product.Id })
+    {
+        var page = WebUtility.HtmlDecode(await Get(path));
+        Check(page.Contains("<html lang=\"tr\">") && Regex.IsMatch(page, "</head>\\s*<body") && !page.Contains(";;") && !page.Contains("</main>;"), "Turkish layout without stray text: " + path);
+        Check(new[] { "categories", "products", "discounts", "popular-products", "contact" }.All(anchor => page.Contains($"href=\"/#{anchor}\"")), "Cross-page homepage links: " + path);
+        Check(!page.Contains("href=\"#\"") && !page.Contains("Sepete Ekle") && !page.Contains("Favorilere Ekle") && !page.Contains("Lorem ipsum") && !page.Contains("Free HTML Template"), "No dead controls or theme text: " + path);
+        Check(page.Contains("1.234,50") && page.Contains("1.000,25"), "Turkish regular and discounted prices: " + path);
+        foreach (var src in Regex.Matches(page, "<img[^>]+src=\"([^\"]+)\"").Select(x => x.Groups[1].Value).Where(x => x.StartsWith('/')).Distinct())
+            Check((await http.GetAsync(src)).StatusCode == HttpStatusCode.OK, "Rendered image exists: " + src);
+    }
+    Check(homepage.Contains("TemplatesJungle") && homepage.Contains($"© {DateTime.Now.Year} FoodMart"), "Footer attribution and current copyright year");
+    Check(homepage.Contains("id=\"mobileSearch\" name=\"search\" type=\"search\"") && homepage.Contains("action=\"/Product/Search\""), "Mobile search uses product search route");
+    Check((await http.GetAsync("/Home")).StatusCode == HttpStatusCode.Redirect, "Obsolete home page redirects to storefront");
+    await Get("/Home/Privacy");
+    var emptyCategory = new Category { Name = "Boş kategori", Icon = "/missing-image.png" };
+    await database.GetCollection<Category>("Categories").InsertOneAsync(emptyCategory);
+    Check(WebUtility.HtmlDecode(await Get("/Product/Category/" + emptyCategory.Id)).Contains("Boş kategori"), "Empty category keeps its actual name");
+    await database.GetCollection<Category>("Categories").DeleteOneAsync(x => x.Id == emptyCategory.Id);
+    Check((await http.GetAsync("/Product/Search?categoryId=invalid")).StatusCode == HttpStatusCode.NotFound, "Malformed search category is rejected");
+    Check((await http.GetAsync("/Product/Category/" + ObjectId.GenerateNewId())).StatusCode == HttpStatusCode.NotFound, "Unknown category returns 404");
+    await database.GetCollection<Product>("Products").UpdateOneAsync(x => x.Id == product.Id, Builders<Product>.Update.Set(x => x.IsActive, false));
+    Check((await http.GetAsync("/Product/Detail/" + product.Id)).StatusCode == HttpStatusCode.NotFound, "Inactive product detail is hidden");
+    var inactiveHome = WebUtility.HtmlDecode(await Get("/"));
+    Check(!inactiveHome.Contains("Test kampanya") && !inactiveHome.Contains("Test ürün") && inactiveHome.Contains("id=\"discounts\"") && inactiveHome.Contains("id=\"popular-products\""), "Inactive product and campaign hidden; empty section anchors remain");
+    await database.GetCollection<Product>("Products").UpdateOneAsync(x => x.Id == product.Id, Builders<Product>.Update.Set(x => x.IsActive, true));
     var dashboard = WebUtility.HtmlDecode(await Get("/Admin/Dashboard"));
     Check(dashboard.Contains("verification@example.test") && dashboard.Contains("dashboardSalesData"), "Claims header and real dashboard JSON");
     Check((await http.GetAsync("/Product/Detail/not-an-id")).StatusCode == HttpStatusCode.NotFound, "Malformed ObjectId returns 404");

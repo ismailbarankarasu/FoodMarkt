@@ -25,7 +25,7 @@
 
             <div>
                 <span class="header-small-text">Bugün</span>
-                <strong>@DateTime.Now.ToString("dd MMM yyyy")</strong>
+                <strong>@DateTime.Now.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR"))</strong>
             </div>
 
         </div>

@@ -14,9 +14,9 @@
 
                 <div class="text-center mb-4">
 
-                    <h2 class="section-title">
+                    <h1 class="section-title">
                         Ürün Ara
-                    </h2>
+                    </h1>
 
                     <p class="text-muted">
                         Aradığınız ürünü hızlıca bulun.
@@ -28,10 +28,12 @@
                       asp-action="Search"
                       method="get">
 
+                    <input type="hidden" name="categoryId" value="@ViewBag.CategoryId" />
                     <div class="input-group input-group-lg">
 
-                        <input type="text"
-                               name="search"
+                        <label for="productSearchInput" class="visually-hidden">Ürün ara</label>
+                        <input id="productSearchInput" type="search"
+                               name="search" maxlength="150"
                                value="@searchTerm"
                                class="form-control"
                                placeholder="Ürün adı veya açıklama ara..."
@@ -101,20 +103,9 @@
                                 </span>
                             }
 
-                            <a href="#"
-                               class="btn-wishlist"
-                               title="Favorilere Ekle">
-
-                                <svg width="24" height="24">
-                                    <use xlink:href="#heart"></use>
-                                </svg>
-
-                            </a>
-
                             <figure>
 
-                                <a href="#"
-                                   title="@item.Name">
+                                <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" title="@item.Name">
 
                                     <img src="@item.ImageUrl"
                                          alt="@item.Name"
@@ -154,71 +145,23 @@
                                 @if (hasDiscount)
                                 {
                                     <span class="price">
-                                        @item.DiscountPrice!.Value.ToString("N2") ₺
+                                        @item.DiscountPrice!.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                     </span>
 
                                     <span class="text-muted text-decoration-line-through ms-2">
-                                        @item.Price.ToString("N2") ₺
+                                        @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="price">
-                                        @item.Price.ToString("N2") ₺
+                                        @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                     </span>
                                 }
 
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-between">
-
-                                <div class="input-group product-qty">
-
-                                    <span class="input-group-btn">
-
-                                        <button type="button"
-                                                class="quantity-left-minus btn btn-danger btn-number">
-
-                                            <svg width="16" height="16">
-                                                <use xlink:href="#minus"></use>
-                                            </svg>
-
-                                        </button>
-
-                                    </span>
-
-                                    <input type="text"
-                                           name="quantity"
-                                           class="form-control input-number"
-                                           value="1"
-                                           min="1" />
-
-                                    <span class="input-group-btn">
-
-                                        <button type="button"
-                                                class="quantity-right-plus btn btn-success btn-number">
-
-                                            <svg width="16" height="16">
-                                                <use xlink:href="#plus"></use>
-                                            </svg>
-
-                                        </button>
-
-                                    </span>
-
-                                </div>
-
-                                <a href="#"
-                                   class="nav-link">
-
-                                    Sepete Ekle
-
-                                    <iconify-icon icon="uil:shopping-cart">
-                                    </iconify-icon>
-
-                                </a>
-
-                            </div>
+                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-dark mt-3">Ürünü incele</a>
 
                         </div>
 

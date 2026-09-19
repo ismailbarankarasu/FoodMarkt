@@ -2,7 +2,7 @@
 
 @if (Model.Any())
 {
-    <section class="py-5 overflow-hidden">
+    <section id="popular-products" class="py-5 overflow-hidden">
 
         <div class="container-fluid">
 
@@ -26,11 +26,11 @@
 
                             <div class="swiper-buttons">
 
-                                <button class="swiper-prev products-carousel-prev btn btn-primary">
+                                <button type="button" aria-label="Önceki ürünler" class="swiper-prev products-carousel-prev btn btn-primary">
                                     ❮
                                 </button>
 
-                                <button class="swiper-next products-carousel-next btn btn-primary">
+                                <button type="button" aria-label="Sonraki ürünler" class="swiper-next products-carousel-next btn btn-primary">
                                     ❯
                                 </button>
 
@@ -75,16 +75,6 @@
                                             -%@discountRate
                                         </span>
                                     }
-
-                                    <a href="#"
-                                       class="btn-wishlist"
-                                       title="Favorilere Ekle">
-
-                                        <svg width="24" height="24">
-                                            <use xlink:href="#heart"></use>
-                                        </svg>
-
-                                    </a>
 
                                     <figure>
 
@@ -144,73 +134,23 @@
                                         @if (hasDiscount)
                                         {
                                             <span class="price">
-                                                @item.DiscountPrice!.Value.ToString("N2") ₺
+                                                @item.DiscountPrice!.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                             </span>
 
                                             <span class="text-muted text-decoration-line-through ms-2">
-                                                @item.Price.ToString("N2") ₺
+                                                @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                             </span>
                                         }
                                         else
                                         {
                                             <span class="price">
-                                                @item.Price.ToString("N2") ₺
+                                                @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
                                             </span>
                                         }
 
                                     </div>
 
-                                    <div class="d-flex align-items-center justify-content-between">
-
-                                        <div class="input-group product-qty">
-
-                                            <span class="input-group-btn">
-
-                                                <button type="button"
-                                                        class="quantity-left-minus btn btn-danger btn-number"
-                                                        data-type="minus">
-
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#minus"></use>
-                                                    </svg>
-
-                                                </button>
-
-                                            </span>
-
-                                            <input type="text"
-                                                   name="quantity"
-                                                   class="form-control input-number"
-                                                   value="1"
-                                                   min="1">
-
-                                            <span class="input-group-btn">
-
-                                                <button type="button"
-                                                        class="quantity-right-plus btn btn-success btn-number"
-                                                        data-type="plus">
-
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#plus"></use>
-                                                    </svg>
-
-                                                </button>
-
-                                            </span>
-
-                                        </div>
-
-                                        <a href="#"
-                                           class="nav-link">
-
-                                            Sepete Ekle
-
-                                            <iconify-icon icon="uil:shopping-cart">
-                                            </iconify-icon>
-
-                                        </a>
-
-                                    </div>
+                                    <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-outline-dark mt-3">Ürünü incele</a>
 
                                 </div>
                             }
@@ -226,4 +166,8 @@
         </div>
 
     </section>
+}
+else
+{
+    <section id="popular-products" class="py-5"><div class="container-fluid"><h2>Çok Satan Ürünler</h2><p class="text-muted">Satışlar oluştukça en çok tercih edilen ürünler burada gösterilecek.</p></div></section>
 }
