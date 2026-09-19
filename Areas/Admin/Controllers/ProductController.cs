@@ -1,12 +1,14 @@
 ﻿using FoodMart.Dtos.ProductDtos;
 using FoodMart.Services.CategoryServices;
 using FoodMart.Services.ProductServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

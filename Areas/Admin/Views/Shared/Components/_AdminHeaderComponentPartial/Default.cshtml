@@ -10,18 +10,7 @@
 
         </button>
 
-        <div class="header-search">
 
-            <i class="bi bi-search"></i>
-
-            <input type="text"
-                   placeholder="Panelde ara..." />
-
-            <span class="search-shortcut">
-                CTRL K
-            </span>
-
-        </div>
 
     </div>
 
@@ -42,29 +31,23 @@
         </div>
 
 
-        <button class="header-icon-button"
-                type="button"
-                title="Bildirimler">
 
-            <i class="bi bi-bell"></i>
-
-            <span class="notification-dot"></span>
-
-        </button>
 
 
         <div class="admin-profile">
 
             <div class="profile-avatar">
-                IB
+                <i class="bi bi-person"></i>
             </div>
 
             <div class="profile-info">
-                <strong>İsmail Baran</strong>
-                <span>Yönetici</span>
+                <strong>@User.Identity?.Name</strong>
+                <span>@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</span>
             </div>
 
-            <i class="bi bi-chevron-down profile-chevron"></i>
+            <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="admin-btn" title="Çıkış yap">Çıkış yap</button>
+            </form>
 
         </div>
 

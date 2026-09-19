@@ -1,0 +1,166 @@
+﻿@model FoodMart.Dtos.AdminDtos.AdminLoginDto
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Yönetici Girişi";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Yönetici Girişi | FoodMart</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+            body {
+                min-height: 100vh;
+                background: #f4f7f4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: Arial, sans-serif;
+            }
+
+            .login-card {
+                width: 100%;
+                max-width: 430px;
+                background: #fff;
+                padding: 40px;
+                border-radius: 18px;
+                box-shadow: 0 20px 50px rgba(0, 0, 0, .08);
+            }
+
+            .login-logo {
+                width: 58px;
+                height: 58px;
+                margin: 0 auto 20px;
+                border-radius: 16px;
+                background: #347c3a;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 26px;
+            }
+
+            .login-title {
+                text-align: center;
+                margin-bottom: 6px;
+                font-weight: 700;
+            }
+
+            .login-description {
+                text-align: center;
+                color: #7c857f;
+                margin-bottom: 28px;
+                font-size: 14px;
+            }
+
+            .form-control {
+                min-height: 48px;
+                border-radius: 10px;
+            }
+
+            .login-button {
+                min-height: 48px;
+                border: 0;
+                border-radius: 10px;
+                background: #347c3a;
+                color: #fff;
+                font-weight: 600;
+            }
+
+                .login-button:hover {
+                    background: #28652e;
+                    color: #fff;
+                }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <div class="login-logo">
+            <i class="bi bi-shop"></i>
+        </div>
+
+        <h3 class="login-title">
+            FoodMart Admin
+        </h3>
+
+        <p class="login-description">
+            Yönetim paneline erişmek için giriş yapın.
+        </p>
+
+        <form asp-area="Admin"
+              asp-controller="Account"
+              asp-action="Login"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All"
+                 class="alert alert-danger"
+                 role="alert">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email"
+                       class="form-label">
+                    E-posta Adresi
+                </label>
+
+                <input asp-for="Email"
+                       type="email"
+                       class="form-control"
+                       placeholder="admin@foodmart.com"
+                       autocomplete="email" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password"
+                       class="form-label">
+                    Şifre
+                </label>
+
+                <input asp-for="Password"
+                       type="password"
+                       class="form-control"
+                       placeholder="Şifrenizi girin"
+                       autocomplete="current-password" />
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="RememberMe"
+                       class="form-check-input" />
+
+                <label asp-for="RememberMe"
+                       class="form-check-label">
+                    Beni hatırla
+                </label>
+            </div>
+
+            <button type="submit"
+                    class="btn login-button w-100">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Giriş Yap
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

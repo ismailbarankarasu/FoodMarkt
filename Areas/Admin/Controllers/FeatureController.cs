@@ -1,10 +1,12 @@
 ﻿using FoodMart.Dtos.FeatureDtos;
 using FoodMart.Services.FeatureServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class FeatureController : Controller
     {
         private readonly IFeatureService _featureService;

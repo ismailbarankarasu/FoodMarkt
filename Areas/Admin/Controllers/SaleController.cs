@@ -1,12 +1,14 @@
 ﻿using FoodMart.Dtos.SaleDtos;
 using FoodMart.Services.ProductServices;
 using FoodMart.Services.SaleServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SaleController : Controller
     {
         private readonly ISaleService _saleService;

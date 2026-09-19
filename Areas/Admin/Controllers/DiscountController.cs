@@ -1,12 +1,14 @@
 ﻿using FoodMart.Dtos.DiscountDtos;
 using FoodMart.Services.DiscountServices;
 using FoodMart.Services.ProductServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class DiscountController : Controller
     {
         private readonly IDiscountService _discountService;

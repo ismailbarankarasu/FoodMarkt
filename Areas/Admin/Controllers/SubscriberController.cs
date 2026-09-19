@@ -1,9 +1,11 @@
 ﻿using FoodMart.Services.SubscriberServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SubscriberController : Controller
     {
         private readonly ISubscriberService _subscriberService;

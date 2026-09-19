@@ -1,3 +1,4 @@
+using FoodMart.Services.AdminAuthServices;
 using FoodMart.Services.CategoryServices;
 using FoodMart.Services.DashboardServices;
 using FoodMart.Services.DiscountServices;
@@ -7,13 +8,17 @@ using FoodMart.Services.ProductServices;
 using FoodMart.Services.SaleServices;
 using FoodMart.Services.SubscriberServices;
 using FoodMart.Settings;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
+});
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 
@@ -38,6 +43,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAdminAuthService, AdminAuthService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ISubscriberService, SubscriberService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
@@ -45,6 +51,25 @@ builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IFeatureService, FeatureService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Admin/Account/Login";
+        options.AccessDeniedPath = "/Admin/Account/AccessDenied";
+
+        options.Cookie.Name = "FoodMarkt.AdminAuth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -56,8 +81,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.XContentTypeOptions = "nosniff";
+    await next(context);
+});
+app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -71,5 +103,36 @@ app.MapControllerRoute(
     pattern: "{controller=Default}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+using (var scope = app.Services.CreateScope())
+{
+    var adminAuthService =
+        scope.ServiceProvider
+            .GetRequiredService<IAdminAuthService>();
 
+    var configuration =
+        scope.ServiceProvider
+            .GetRequiredService<IConfiguration>();
+
+    var adminExists =
+        await adminAuthService.AdminExistsAsync();
+
+    if (!adminExists)
+    {
+        var adminSeed =
+            configuration
+                .GetSection("AdminSeed")
+                .Get<AdminSeedSettings>();
+
+        if (adminSeed is not null &&
+            !string.IsNullOrWhiteSpace(adminSeed.FullName) &&
+            !string.IsNullOrWhiteSpace(adminSeed.Email) &&
+            !string.IsNullOrWhiteSpace(adminSeed.Password))
+        {
+            await adminAuthService.CreateAdminAsync(
+                adminSeed.FullName,
+                adminSeed.Email,
+                adminSeed.Password);
+        }
+    }
+}
 app.Run();
