@@ -1,4 +1,5 @@
-﻿using FoodMart.Dtos.DiscountDtos;
+using FoodMart.Services.ImageServices;
+using FoodMart.Dtos.DiscountDtos;
 using FoodMart.Services.DiscountServices;
 using FoodMart.Services.ProductServices;
 using Microsoft.AspNetCore.Authorization;
@@ -11,13 +12,15 @@ namespace FoodMart.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class DiscountController : Controller
     {
+        private readonly ImageService _imageService;
         private readonly IDiscountService _discountService;
         private readonly IProductService _productService;
 
         public DiscountController(
-            IDiscountService discountService,
+            ImageService imageService, IDiscountService discountService,
             IProductService productService)
         {
+            _imageService = imageService;
             _discountService = discountService;
             _productService = productService;
         }
@@ -46,19 +49,10 @@ namespace FoodMart.Areas.Admin.Controllers
         public async Task<IActionResult> CreateDiscount(
             CreateDiscountDto createDiscountDto)
         {
-            if (createDiscountDto.EndDate < createDiscountDto.StartDate)
+            if (createDiscountDto.ImageFile is not null)
             {
-                ModelState.AddModelError(
-                    nameof(createDiscountDto.EndDate),
-                    "Bitiş tarihi başlangıç tarihinden önce olamaz.");
-            }
-
-            if (createDiscountDto.DiscountRate <= 0 ||
-                createDiscountDto.DiscountRate > 100)
-            {
-                ModelState.AddModelError(
-                    nameof(createDiscountDto.DiscountRate),
-                    "İndirim oranı 1 ile 100 arasında olmalıdır.");
+                var error = await _imageService.ValidateAsync(createDiscountDto.ImageFile, HttpContext.RequestAborted);
+                if (error is not null) ModelState.AddModelError("ImageFile", error);
             }
 
             if (!ModelState.IsValid)
@@ -67,8 +61,21 @@ namespace FoodMart.Areas.Admin.Controllers
                 return View(createDiscountDto);
             }
 
-            await _discountService.CreateAsync(createDiscountDto);
+            var uploadedUrl = createDiscountDto.ImageFile is null ? null
+                : await _imageService.SaveAsync(createDiscountDto.ImageFile, HttpContext.RequestAborted);
+            if (uploadedUrl is not null) createDiscountDto.ImageUrl = uploadedUrl;
+            try
+            {
+                await _discountService.CreateAsync(createDiscountDto);
+            }
+            catch
+            {
+                await _imageService.DeleteIfUnusedAsync(uploadedUrl);
+                throw;
+            }
 
+
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -103,19 +110,15 @@ namespace FoodMart.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateDiscount(
             UpdateDiscountDto updateDiscountDto)
         {
-            if (updateDiscountDto.EndDate < updateDiscountDto.StartDate)
-            {
-                ModelState.AddModelError(
-                    nameof(updateDiscountDto.EndDate),
-                    "Bitiş tarihi başlangıç tarihinden önce olamaz.");
-            }
+            if (!MongoDB.Bson.ObjectId.TryParse(updateDiscountDto.Id, out _)) return NotFound();
+            var existing = await _discountService.GetByIdAsync(updateDiscountDto.Id);
+            if (existing is null) return NotFound();
+            if (string.IsNullOrWhiteSpace(updateDiscountDto.ImageUrl)) updateDiscountDto.ImageUrl = existing.ImageUrl;
 
-            if (updateDiscountDto.DiscountRate <= 0 ||
-                updateDiscountDto.DiscountRate > 100)
+            if (updateDiscountDto.ImageFile is not null)
             {
-                ModelState.AddModelError(
-                    nameof(updateDiscountDto.DiscountRate),
-                    "İndirim oranı 1 ile 100 arasında olmalıdır.");
+                var error = await _imageService.ValidateAsync(updateDiscountDto.ImageFile, HttpContext.RequestAborted);
+                if (error is not null) ModelState.AddModelError("ImageFile", error);
             }
 
             if (!ModelState.IsValid)
@@ -124,8 +127,22 @@ namespace FoodMart.Areas.Admin.Controllers
                 return View(updateDiscountDto);
             }
 
-            await _discountService.UpdateAsync(updateDiscountDto);
+            var uploadedUrl = updateDiscountDto.ImageFile is null ? null
+                : await _imageService.SaveAsync(updateDiscountDto.ImageFile, HttpContext.RequestAborted);
+            if (uploadedUrl is not null) updateDiscountDto.ImageUrl = uploadedUrl;
+            try
+            {
+                await _discountService.UpdateAsync(updateDiscountDto);
+            }
+            catch
+            {
+                await _imageService.DeleteIfUnusedAsync(uploadedUrl);
+                throw;
+            }
+            await _imageService.DeleteIfUnusedAsync(existing.ImageUrl);
 
+
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -133,8 +150,12 @@ namespace FoodMart.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteDiscount(string id)
         {
+            var existing = await _discountService.GetByIdAsync(id);
+            if (existing is null) return NotFound();
             await _discountService.DeleteAsync(id);
+            await _imageService.DeleteIfUnusedAsync(existing.ImageUrl);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 

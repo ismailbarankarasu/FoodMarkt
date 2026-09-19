@@ -46,6 +46,7 @@ namespace FoodMart.Areas.Admin.Controllers
 
             await _subscriberService.DeleteAsync(id);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
     }

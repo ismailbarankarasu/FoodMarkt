@@ -42,10 +42,6 @@ namespace FoodMart.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSale(CreateSaleDto createSaleDto)
         {
-            ValidateSale(
-                createSaleDto.ProductId,
-                createSaleDto.Quantity,
-                createSaleDto.UnitPrice);
 
             if (!ModelState.IsValid)
             {
@@ -55,6 +51,7 @@ namespace FoodMart.Areas.Admin.Controllers
 
             await _saleService.CreateAsync(createSaleDto);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -85,10 +82,6 @@ namespace FoodMart.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateSale(
             UpdateSaleDto updateSaleDto)
         {
-            ValidateSale(
-                updateSaleDto.ProductId,
-                updateSaleDto.Quantity,
-                updateSaleDto.UnitPrice);
 
             if (!ModelState.IsValid)
             {
@@ -98,6 +91,7 @@ namespace FoodMart.Areas.Admin.Controllers
 
             await _saleService.UpdateAsync(updateSaleDto);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -107,6 +101,7 @@ namespace FoodMart.Areas.Admin.Controllers
         {
             await _saleService.DeleteAsync(id);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -120,28 +115,5 @@ namespace FoodMart.Areas.Admin.Controllers
                 "Name");
         }
 
-        private void ValidateSale(string? productId, int quantity, decimal unitPrice)
-        {
-            if (string.IsNullOrWhiteSpace(productId))
-            {
-                ModelState.AddModelError(
-                    "ProductId",
-                    "Lütfen bir ürün seçiniz.");
-            }
-
-            if (quantity <= 0)
-            {
-                ModelState.AddModelError(
-                    "Quantity",
-                    "Satış adedi 1 veya daha büyük olmalıdır.");
-            }
-
-            if (unitPrice <= 0)
-            {
-                ModelState.AddModelError(
-                    "UnitPrice",
-                    "Birim fiyat 0'dan büyük olmalıdır.");
-            }
-        }
     }
 }

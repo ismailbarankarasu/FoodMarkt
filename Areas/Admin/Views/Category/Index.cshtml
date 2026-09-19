@@ -44,7 +44,7 @@
 
         <div>
             <h3>Kategori Listesi</h3>
-            <p>MongoDB üzerinde kayıtlı tüm kategoriler</p>
+            <p>Kayıtlı tüm kategoriler</p>
         </div>
 
         <div class="table-search">
@@ -69,7 +69,7 @@
                 <thead>
                     <tr>
                         <th>Kategori</th>
-                        <th>MongoDB ID</th>
+                        <th>Kayıt No</th>
                         <th>İkon</th>
                         <th class="text-right">İşlemler</th>
                     </tr>
@@ -120,17 +120,9 @@
 
                                     </a>
 
-                                    <a asp-area="Admin"
-                                       asp-controller="Category"
-                                       asp-action="DeleteCategory"
-                                       asp-route-id="@item.Id"
-                                       class="table-action delete delete-category"
-                                       data-category="@item.Name"
-                                       title="Sil">
-
-                                        <i class="bi bi-trash3"></i>
-
-                                    </a>
+                                    <form asp-area="Admin" asp-controller="Category" asp-action="DeleteCategory" asp-route-id="@item.Id" method="post" class="delete-category-form">
+                                        <button type="submit" class="table-action delete" title="Sil"><i class="bi bi-trash3"></i></button>
+                                    </form>
 
                                 </div>
 

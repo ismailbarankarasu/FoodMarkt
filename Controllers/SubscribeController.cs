@@ -2,7 +2,7 @@
 using FoodMart.Services.EmailServices;
 using FoodMart.Services.SubscriberServices;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+
 
 namespace FoodMart.Controllers
 {
@@ -23,26 +23,9 @@ namespace FoodMart.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateSubscriberDto createSubscriberDto)
         {
-            if (string.IsNullOrWhiteSpace(createSubscriberDto.FullName))
+            if (!ModelState.IsValid)
             {
-                TempData["SubscribeError"] = "Lütfen adınızı ve soyadınızı giriniz.";
-
-                return RedirectToHome();
-            }
-
-            if (string.IsNullOrWhiteSpace(createSubscriberDto.Email))
-            {
-                TempData["SubscribeError"] = "Lütfen e-posta adresinizi giriniz.";
-
-                return RedirectToHome();
-            }
-
-            var emailValidator = new EmailAddressAttribute();
-
-            if (!emailValidator.IsValid(createSubscriberDto.Email))
-            {
-                TempData["SubscribeError"] = "Lütfen geçerli bir e-posta adresi giriniz.";
-
+                TempData["SubscribeError"] = string.Join(" ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
                 return RedirectToHome();
             }
 
@@ -75,14 +58,22 @@ namespace FoodMart.Controllers
                 return RedirectToHome();
             }
 
+            catch (MongoDB.Driver.MongoWriteException ex) when (ex.WriteError.Category == MongoDB.Driver.ServerErrorCategory.DuplicateKey)
+            {
+                TempData["SubscribeError"] = "Bu e-posta adresi kampanyaya daha önce katılmış.";
+                return RedirectToHome();
+            }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Subscriber discount email could not be sent.");
                 if (subscriber is not null)
                 {
-                    await _subscriberService.DeleteAsync(subscriber.Id);
+                    try { await _subscriberService.DeleteAsync(subscriber.Id); }
+                    catch (Exception cleanupError)
+                    {
+                        _logger.LogError(cleanupError, "Failed subscription cleanup could not be completed.");
+                    }
                 }
-
-                _logger.LogError(ex, "Subscriber discount email could not be sent to {Email}.", createSubscriberDto.Email);
 
                 TempData["SubscribeError"] = "İndirim kodunuz gönderilirken bir sorun oluştu. Lütfen tekrar deneyiniz.";
 

@@ -22,7 +22,8 @@
 
 </div>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="admin-validation" role="alert"></div>
 
     @Html.AntiForgeryToken()
 
@@ -210,6 +211,9 @@
 
                 <div class="admin-form-group">
 
+                    <label for="ImageFile">Görsel yükle (JPG, PNG, WebP; en fazla 5 MB)</label>
+                    <input type="file" id="ImageFile" name="ImageFile" accept="image/jpeg,image/png,image/webp" class="admin-image-upload" />
+                    <span asp-validation-for="ImageFile" class="admin-validation"></span>
                     <label asp-for="ImageUrl">
                         Görsel URL
                     </label>

@@ -7,7 +7,7 @@ namespace FoodMart.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         [BsonRepresentation(BsonType.ObjectId)]
         public string CategoryId { get; set; } = null!;
 

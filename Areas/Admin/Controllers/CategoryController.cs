@@ -31,15 +31,20 @@ namespace FoodMart.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
         {
+            if (!ModelState.IsValid) return View(createCategoryDto);
             await _categoryService.CreateAsync(createCategoryDto);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteCategory(string id)
         {
             await _categoryService.DeleteAsync(id);
 
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -64,7 +69,9 @@ namespace FoodMart.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
+            if (!ModelState.IsValid) return View(updateCategoryDto);
             await _categoryService.UpdateAsync(updateCategoryDto);
+            TempData["AdminSuccess"] = "İşlem başarıyla tamamlandı.";
             return RedirectToAction(nameof(Index));
         }
     }

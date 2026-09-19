@@ -5,7 +5,7 @@ namespace FoodMart.Services.SaleServices
     public interface ISaleService
     {
         Task<List<ResultSaleDto>> GetAllAsync();
-        Task<GetByIdSaleDto> GetByIdAsync(string id);
+        Task<GetByIdSaleDto?> GetByIdAsync(string id);
         Task CreateAsync(CreateSaleDto createSaleDto);
         Task UpdateAsync(UpdateSaleDto updateSaleDto);
         Task DeleteAsync(string id);

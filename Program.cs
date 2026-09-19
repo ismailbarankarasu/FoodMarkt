@@ -11,13 +11,22 @@ using FoodMart.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using FluentValidation;
+using FoodMart.Filters;
+using FoodMart.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddValidatorsFromAssemblyContaining<AdminLoginDtoValidator>();
 builder.Services.AddControllersWithViews(options =>
 {
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+    options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(_ => "Lütfen geçerli bir sayı giriniz.");
+    options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((_, _) => "Girilen değer geçerli değil.");
+    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "Bu alan zorunludur.");
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
+    options.Filters.Add<FormValidationFilter>();
 });
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
@@ -69,6 +78,7 @@ builder.Services
         options.SlidingExpiration = true;
     });
 
+builder.Services.AddScoped<FoodMart.Services.ImageServices.ImageService>();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
