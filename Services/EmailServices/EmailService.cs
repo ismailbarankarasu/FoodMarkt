@@ -85,7 +85,7 @@ namespace FoodMart.Services.EmailServices
                             <div style="padding:40px 35px;">
 
                                 <h2 style="margin-top:0;">
-                                    Merhaba {fullName},
+                                    Merhaba {System.Net.WebUtility.HtmlEncode(fullName)},
                                 </h2>
 
                                 <p style="

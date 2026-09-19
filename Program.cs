@@ -14,10 +14,15 @@ using MongoDB.Driver;
 using FluentValidation;
 using FoodMart.Filters;
 using FoodMart.Validators;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSerilog((services, logger) => logger
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext().WriteTo.Console());
 builder.Services.AddValidatorsFromAssemblyContaining<AdminLoginDtoValidator>();
 builder.Services.AddControllersWithViews(options =>
 {
@@ -27,6 +32,7 @@ builder.Services.AddControllersWithViews(options =>
     options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "Bu alan zorunludur.");
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
     options.Filters.Add<FormValidationFilter>();
+    options.Filters.Add<AdminOperationFilter>();
 });
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
