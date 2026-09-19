@@ -40,7 +40,12 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/admin/js/custom-admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if (TempData["AdminSuccess"] is string message)
+    {
+        <div id="adminSuccess" class="admin-notice" role="status">@message</div>
+    }
+    <script src="~/admin/js/custom-admin.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

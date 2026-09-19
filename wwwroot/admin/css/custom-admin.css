@@ -2361,3 +2361,20 @@ input {
         border: 0;
         cursor: pointer;
     }
+.admin-validation, .validation-summary-errors, .field-validation-error {
+    color: var(--danger);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+.validation-summary-valid, .field-validation-valid { display: none; }
+.admin-image-upload { max-width: 100%; margin: 10px 0; }
+.delete-category-form { margin: 0; }
+.delete-category-form button { border: 0; cursor: pointer; }
+.admin-notice { padding: 16px; color: var(--primary); background: var(--primary-light); }
+.profile-info { min-width: 0; }
+.profile-info span { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+    .admin-profile { gap: 8px; }
+    .profile-info { max-width: 125px; }
+    .admin-profile .admin-btn { padding: 8px; white-space: nowrap; }
+}

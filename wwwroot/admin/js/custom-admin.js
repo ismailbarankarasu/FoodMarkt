@@ -459,24 +459,7 @@ if (productSearch) {
     });
 }
 
-document
-    .querySelectorAll(".delete-product-form")
-    .forEach(form => {
 
-        form.addEventListener("submit", function (event) {
-
-            const productName =
-                this.dataset.product ?? "bu ürün";
-
-            const confirmed = confirm(
-                `"${productName}" ürününü silmek istediğinize emin misiniz?`
-            );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-        });
-    });
 
 
 const featureSearch = document.getElementById("featureSearch");
@@ -558,24 +541,7 @@ if (featureImageUrl && featurePreviewImage) {
 }
 
 
-document
-    .querySelectorAll(".delete-feature-form")
-    .forEach(form => {
 
-        form.addEventListener("submit", function (event) {
-
-            const featureName =
-                this.dataset.feature ?? "bu slider";
-
-            const confirmed = confirm(
-                `"${featureName}" sliderını silmek istediğinize emin misiniz?`
-            );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-        });
-    });
 
 const discountSearch =
     document.getElementById("discountSearch");
@@ -672,24 +638,7 @@ if (discountImageUrl && discountPreviewImage) {
 }
 
 
-document
-    .querySelectorAll(".delete-discount-form")
-    .forEach(form => {
 
-        form.addEventListener("submit", function (event) {
-
-            const discountName =
-                this.dataset.discount ?? "bu indirimi";
-
-            const confirmed = confirm(
-                `"${discountName}" kampanyasını silmek istediğinize emin misiniz?`
-            );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-        });
-    });
 
 const saleQuantity =
     document.getElementById("Quantity");
@@ -773,26 +722,7 @@ if (saleSearch) {
 }
 
 
-document
-    .querySelectorAll(".delete-sale-form")
-    .forEach(form => {
 
-        form.addEventListener(
-            "submit",
-            function (event) {
-
-                const productName =
-                    this.dataset.sale ?? "bu satış";
-
-                const confirmed = confirm(
-                    `"${productName}" satış kaydını silmek istediğinize emin misiniz?`
-                );
-
-                if (!confirmed) {
-                    event.preventDefault();
-                }
-            });
-    });
 
 
 const subscriberSearch =
@@ -832,23 +762,37 @@ if (subscriberSearch) {
 }
 
 
-document
-    .querySelectorAll(".delete-subscriber-form")
-    .forEach(form => {
 
-        form.addEventListener("submit", function (event) {
-
-            const subscriber =
-                this.dataset.subscriber ?? "bu abone";
-
-            const confirmed = confirm(
-                `"${subscriber}" aboneliğini silmek istediğinize emin misiniz?`
-            );
-
-            if (!confirmed) {
-                event.preventDefault();
-            }
-
+// Submit the original POST form so MVC's anti-forgery token is preserved.
+document.querySelectorAll('form[class*="delete-"]').forEach(form => {
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!window.Swal) {
+            alert('Onay penceresi yüklenemedi. Lütfen sayfayı yenileyiniz.');
+            return;
+        }
+        const result = await Swal.fire({
+            title: 'Silmek istediğinize emin misiniz?',
+            text: 'Bu işlem geri alınamaz.', icon: 'warning',
+            showCancelButton: true, confirmButtonText: 'Sil', cancelButtonText: 'İptal',
+            confirmButtonColor: '#dc3545', cancelButtonColor: '#2f7d32', focusCancel: true
         });
-
+        if (result.isConfirmed) HTMLFormElement.prototype.submit.call(form);
     });
+});
+const notice = document.getElementById('adminSuccess');
+if (notice && window.Swal) {
+    Swal.fire({ title: 'Başarılı', text: notice.textContent, icon: 'success', confirmButtonText: 'Tamam', confirmButtonColor: '#2f7d32' });
+}
+document.querySelectorAll('.admin-image-upload').forEach(input => {
+    let previewUrl;
+    input.addEventListener('change', () => {
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        const preview = input.closest('form').querySelector('img[id]');
+        if (preview && input.files[0]) {
+            previewUrl = URL.createObjectURL(input.files[0]);
+            preview.src = previewUrl;
+            preview.style.display = 'block';
+        }
+    });
+});
