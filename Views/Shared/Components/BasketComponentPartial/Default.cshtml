@@ -1,0 +1,5 @@
+@model FoodMart.Dtos.CartDtos.CartDto
+<a asp-area="" asp-controller="Cart" asp-action="Index" class="header-cart text-decoration-none" aria-label="Sepetim, @Model.TotalQuantity ürün">
+    <span class="cart-icon"><svg width="28" height="28" aria-hidden="true"><use href="#cart"></use></svg><span class="cart-count">@Model.TotalQuantity</span></span>
+    <span><span class="d-block text-muted">Sepetim</span><strong class="text-dark">@Model.TotalPrice.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺</strong></span>
+</a>

@@ -1,0 +1,34 @@
+@model FoodMart.Dtos.CartDtos.CartDto
+@{ ViewData["Title"] = "Sepetim"; var culture = System.Globalization.CultureInfo.GetCultureInfo("tr-TR"); }
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between flex-wrap gap-3 mb-4"><h1>Sepetim</h1><a asp-controller="Product" asp-action="Index" class="btn btn-outline-dark">Ürünlere dön</a></div>
+        @if (Model.Items.Count == 0)
+        {
+            <div class="bg-light rounded-4 p-5 text-center"><h2 class="h4">Sepetiniz henüz boş</h2><p>Beğendiğiniz ürünleri inceleyip sepetinize ekleyebilirsiniz.</p><a asp-controller="Product" asp-action="Index" class="btn btn-primary">Ürünleri keşfet</a></div>
+        }
+        else
+        {
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    @foreach (var item in Model.Items)
+                    {
+                        <article class="cart-item border rounded-4 p-3 mb-3">
+                            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId"><img src="@item.ImageUrl" alt="@item.Name" width="100" height="100" /></a>
+                            <div class="cart-item-info"><h2 class="h5"><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId">@item.Name</a></h2><p class="mb-1">Birim fiyat: @item.UnitPrice.ToString("N2", culture) ₺</p><strong>@item.TotalPrice.ToString("N2", culture) ₺</strong></div>
+                            <div class="cart-item-actions">
+                                <form asp-controller="Cart" asp-action="Update" method="post" class="d-flex align-items-end gap-2">
+                                    <input type="hidden" name="id" value="@item.ProductId" />
+                                    <div><label for="quantity-@item.ProductId" class="form-label">Adet</label><input id="quantity-@item.ProductId" name="quantity" type="number" min="1" max="@item.Stock" value="@item.Quantity" required class="form-control cart-quantity" /></div>
+                                    <button type="submit" class="btn btn-outline-dark">Güncelle</button>
+                                </form>
+                                <form asp-controller="Cart" asp-action="Remove" method="post" class="mt-2"><input type="hidden" name="id" value="@item.ProductId" /><button type="submit" class="btn btn-link text-danger p-0">Sepetten çıkar</button></form>
+                            </div>
+                        </article>
+                    }
+                </div>
+                <div class="col-lg-4"><aside class="bg-light rounded-4 p-4"><h2 class="h4">Sepet Özeti</h2><p>@Model.TotalQuantity adet ürün</p><div class="d-flex justify-content-between gap-2 fs-5"><span>Toplam</span><strong>@Model.TotalPrice.ToString("N2", culture) ₺</strong></div><p class="small text-muted mt-3">Fiyat ve adetler güncel ürün stoklarına göre yenilenir. Sepet stok ayırmaz. Bu projede sipariş ve ödeme işlemi bulunmamaktadır.</p><form asp-controller="Cart" asp-action="Clear" method="post"><button type="submit" class="btn btn-outline-danger">Sepeti temizle</button></form></aside></div>
+            </div>
+        }
+    </div>
+</section>

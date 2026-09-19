@@ -87,6 +87,19 @@ builder.Services
 builder.Services.AddScoped<FoodMart.Services.ImageServices.ImageService>();
 builder.Services.AddScoped<FoodMart.Services.MongoIndexService>();
 builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(24);
+    options.Cookie.Name = "FoodMart.CartSession";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+});
+builder.Services.AddScoped<FoodMart.Services.CartServices.CartService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -105,6 +118,7 @@ app.Use(async (context, next) =>
 });
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

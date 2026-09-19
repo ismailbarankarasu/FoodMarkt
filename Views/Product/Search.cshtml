@@ -162,6 +162,10 @@
                             </div>
 
                             <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-dark mt-3">Ürünü incele</a>
+                            @if (item.Stock > 0)
+                            {
+                                <partial name="_AddToCartPartial" model="item.Id" />
+                            }
 
                         </div>
 

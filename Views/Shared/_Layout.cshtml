@@ -7,6 +7,14 @@
     @await Component.InvokeAsync("MobilSearchComponentPartial")
     @await Component.InvokeAsync("_LayoutHeaderComponentPartial")
     <main id="main-content" tabindex="-1">
+        @if (TempData["CartSuccess"] is string success)
+        {
+            <div class="container-fluid pt-3"><div class="alert alert-success" role="status">@success <a asp-controller="Cart" asp-action="Index" class="alert-link">Sepetime git</a></div></div>
+        }
+        @if (TempData["CartError"] is string error)
+        {
+            <div class="container-fluid pt-3"><div class="alert alert-danger" role="alert">@error</div></div>
+        }
         @RenderBody()
     </main>
     @await Component.InvokeAsync("_LayoutFooterComponentPartial")

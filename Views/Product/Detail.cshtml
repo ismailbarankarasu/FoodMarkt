@@ -135,6 +135,15 @@
                 </div>
 
 
+                @if (Model.Stock > 0)
+                {
+                    <form asp-controller="Cart" asp-action="Add" method="post" class="add-to-cart-form d-flex align-items-end gap-3 mb-4">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="returnUrl" value="@(Context.Request.PathBase + Context.Request.Path)" />
+                        <div><label for="addQuantity" class="form-label">Adet</label><input id="addQuantity" name="quantity" type="number" min="1" max="@Math.Min(Model.Stock, 99)" value="1" required class="form-control cart-quantity" /></div>
+                        <button type="submit" class="btn btn-primary">Sepete Ekle</button>
+                    </form>
+                }
                 <div class="d-flex flex-wrap gap-3">
                     <a asp-controller="Product" asp-action="Category" asp-route-id="@Model.CategoryId" class="btn btn-primary">@ViewBag.CategoryName ürünleri</a>
                     <a asp-controller="Product" asp-action="Index" class="btn btn-outline-dark">Tüm ürünlere dön</a>
