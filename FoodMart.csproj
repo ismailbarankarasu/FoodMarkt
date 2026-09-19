@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Verification/**/*.cs" />
+    <Content Remove="Verification/**" />
+    <None Remove="Verification/**" />
     <None Include="ViewComponents\DiscountComponentPartial.cs" />
   </ItemGroup>
 
