@@ -1,177 +1,155 @@
 ﻿@model List<FoodMart.Dtos.SaleDtos.PopularProductDto>
 
-@if (Model.Any())
-{
-    <section id="popular-products" class="py-5 overflow-hidden">
+@{
+    var culture = System.Globalization.CultureInfo.GetCultureInfo("tr-TR");
+}
 
-        <div class="container-fluid">
+<section id="popular-products" class="py-5 overflow-hidden">
+    <div class="container-fluid">
 
-            <div class="row">
+        <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-3 my-5">
+            <h2 class="section-title mb-0">Çok Satan Ürünler</h2>
 
-                <div class="col-md-12">
+            <div class="d-flex align-items-center">
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="btn-link text-decoration-none">
+                    Tüm Ürünleri Gör →
+                </a>
 
-                    <div class="section-header d-flex flex-wrap justify-content-between my-5">
+                @if (Model.Any())
+                {
+                    <div class="swiper-buttons">
+                        <button type="button"
+                                aria-label="Önceki ürünler"
+                                class="swiper-prev products-carousel-prev btn btn-primary">
+                            ❮
+                        </button>
 
-                        <h2 class="section-title">
-                            Çok Satan Ürünler
-                        </h2>
-
-                        <div class="d-flex align-items-center">
-
-                            <a asp-controller="Product"
-                               asp-action="Index"
-                               class="btn-link text-decoration-none">
-                                Tüm Ürünleri Gör →
-                            </a>
-
-                            <div class="swiper-buttons">
-
-                                <button type="button" aria-label="Önceki ürünler" class="swiper-prev products-carousel-prev btn btn-primary">
-                                    ❮
-                                </button>
-
-                                <button type="button" aria-label="Sonraki ürünler" class="swiper-next products-carousel-next btn btn-primary">
-                                    ❯
-                                </button>
-
-                            </div>
-
-                        </div>
-
+                        <button type="button"
+                                aria-label="Sonraki ürünler"
+                                class="swiper-next products-carousel-next btn btn-primary">
+                            ❯
+                        </button>
                     </div>
-
-                </div>
-
+                }
             </div>
+        </div>
 
-            <div class="row">
+        @if (Model.Any())
+        {
+            <div class="products-carousel swiper">
+                <div class="swiper-wrapper">
 
-                <div class="col-md-12">
+                    @foreach (var item in Model)
+                    {
+                        var hasDiscount = item.DiscountPrice.HasValue
+                            && item.DiscountPrice.Value > 0
+                            && item.DiscountPrice.Value < item.Price;
 
-                    <div class="products-carousel swiper">
+                        <div class="swiper-slide popular-product-slide">
+                            <article class="store-product-card">
 
-                        <div class="swiper-wrapper">
-
-                            @foreach (var item in Model)
-                            {
-                                var hasDiscount =
-                                    item.DiscountPrice.HasValue &&
-                                    item.DiscountPrice.Value > 0 &&
-                                    item.DiscountPrice.Value < item.Price;
-
-                                var discountRate = 0;
-
-                                if (hasDiscount && item.Price > 0)
-                                {
-                                    discountRate = (int)Math.Round(
-                                        (1 - (item.DiscountPrice!.Value / item.Price)) * 100);
-                                }
-
-                                <div class="product-item swiper-slide">
-
+                                <div class="store-product-image">
                                     @if (hasDiscount)
                                     {
-                                        <span class="badge bg-success position-absolute m-3">
+                                        var discountRate = Math.Round(
+                                            (1 - item.DiscountPrice!.Value / item.Price) * 100);
+
+                                        <span class="store-product-discount badge bg-success">
                                             -%@discountRate
                                         </span>
                                     }
 
-                                    <figure>
+                                    <a asp-controller="Product"
+                                       asp-action="Detail"
+                                       asp-route-id="@item.ProductId"
+                                       aria-label="@item.ProductName">
 
-                                        <a asp-controller="Product"
-                                        asp-action="Detail"
-                                        asp-route-id="@item.ProductId"
-                                           title="@item.ProductName">
-
+                                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                        {
                                             <img src="@item.ImageUrl"
                                                  alt="@item.ProductName"
-                                                 class="tab-image">
-
-                                        </a>
-
-                                    </figure>
-
-                                    <h3>
-                                        <a asp-controller="Product"
-                                           asp-action="Detail"
-                                           asp-route-id="@item.ProductId"
-                                           class="text-decoration-none text-dark">
-                                            @item.ProductName
-                                        </a>
-                                    </h3>
-
-                                    <div class="mb-2">
-
-                                        <span class="qty">
-                                            @item.CategoryName
-                                        </span>
-
-                                    </div>
-
-                                    <div class="mb-2">
-
-                                        <span class="qty">
-                                            @item.TotalQuantitySold adet satıldı
-                                        </span>
-
-                                    </div>
-
-                                    @if (item.Stock > 0)
-                                    {
-                                        <span class="text-success small">
-                                            Stokta
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger small">
-                                            Stokta Yok
-                                        </span>
-                                    }
-
-                                    <div class="mt-2 mb-3">
-
-                                        @if (hasDiscount)
-                                        {
-                                            <span class="price">
-                                                @item.DiscountPrice!.Value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
-                                            </span>
-
-                                            <span class="text-muted text-decoration-line-through ms-2">
-                                                @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
-                                            </span>
+                                                 loading="lazy">
                                         }
                                         else
                                         {
-                                            <span class="price">
-                                                @item.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("tr-TR")) ₺
+                                            <span class="text-muted">
+                                                Görsel bulunmuyor
                                             </span>
                                         }
-
-                                    </div>
-
-                                    <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-outline-dark mt-3">Ürünü incele</a>
-                            @if (item.Stock > 0)
-                            {
-                                <partial name="_AddToCartPartial" model="item.ProductId" />
-                            }
-
+                                    </a>
                                 </div>
-                            }
 
+                                <h3 class="store-product-title">
+                                    <a asp-controller="Product"
+                                       asp-action="Detail"
+                                       asp-route-id="@item.ProductId">
+                                        @item.ProductName
+                                    </a>
+                                </h3>
+
+                                <div class="store-product-category">
+                                    @item.CategoryName
+                                </div>
+
+                                <div class="store-product-sales">
+                                    @item.TotalQuantitySold adet satıldı
+                                </div>
+
+                                <div class="store-product-stock @(item.Stock > 0 ? "text-success" : "text-danger")">
+                                    @(item.Stock > 0 ? "Stokta" : "Stokta Yok")
+                                </div>
+
+                                <div class="store-product-prices">
+                                    <span class="store-product-current-price">
+                                        @((hasDiscount ? item.DiscountPrice!.Value : item.Price).ToString("N2", culture)) ₺
+                                    </span>
+
+                                    @if (hasDiscount)
+                                    {
+                                        <del class="store-product-old-price">
+                                            @item.Price.ToString("N2", culture) ₺
+                                        </del>
+                                    }
+                                </div>
+
+                                <div class="store-product-actions">
+                                    <a asp-controller="Product"
+                                       asp-action="Detail"
+                                       asp-route-id="@item.ProductId"
+                                       class="btn btn-outline-dark w-100">
+                                        Ürünü incele
+                                    </a>
+
+                                    @if (item.Stock > 0)
+                                    {
+                                        <partial name="_AddToCartPartial"
+                                                 model="item.ProductId" />
+                                    }
+                                    else
+                                    {
+                                        <button type="button"
+                                                class="btn btn-secondary w-100"
+                                                disabled>
+                                            Stokta Yok
+                                        </button>
+                                    }
+                                </div>
+
+                            </article>
                         </div>
-
-                    </div>
+                    }
 
                 </div>
-
             </div>
+        }
+        else
+        {
+            <p class="text-muted">
+                Satışlar oluştukça en çok tercih edilen ürünler burada gösterilecek.
+            </p>
+        }
 
-        </div>
-
-    </section>
-}
-else
-{
-    <section id="popular-products" class="py-5"><div class="container-fluid"><h2>Çok Satan Ürünler</h2><p class="text-muted">Satışlar oluştukça en çok tercih edilen ürünler burada gösterilecek.</p></div></section>
-}
+    </div>
+</section>

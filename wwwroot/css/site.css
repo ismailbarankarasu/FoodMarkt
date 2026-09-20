@@ -281,3 +281,182 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     .cart-item { flex-wrap: wrap; gap: 12px; }
     .cart-item-actions { width: 100%; }
 }
+/* Kategorilerde yatay kaydırma çubuğunu gizle */
+#categories .category-carousel,
+#categories .category-carousel .swiper-wrapper {
+    scrollbar-width: none;
+}
+
+    #categories .category-carousel::-webkit-scrollbar,
+    #categories .category-carousel .swiper-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+/* Son eklenen ürünler */
+:is(#products, #popular-products, #all-products) .store-product-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 4%);
+}
+
+:is(#products, #popular-products, #all-products) .store-product-image {
+    position: relative;
+    height: 200px;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: #f8f8f8;
+    overflow: hidden;
+}
+
+    :is(#products, #popular-products, #all-products) .store-product-image > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 12px;
+        text-decoration: none;
+    }
+
+    :is(#products, #popular-products, #all-products) .store-product-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+:is(#products, #popular-products, #all-products) .store-product-discount {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-title {
+    min-height: 2.8em;
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+    :is(#products, #popular-products, #all-products) .store-product-title a {
+        color: #222;
+        text-decoration: none;
+    }
+
+:is(#products, #popular-products, #all-products) .store-product-category {
+    min-height: 3em;
+    margin-bottom: 8px;
+    color: #818181;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-stock {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-prices {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    min-height: 56px;
+    margin-bottom: 16px;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-current-price {
+    color: #222;
+    font-size: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-old-price {
+    color: #888;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+:is(#products, #popular-products, #all-products) .store-product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+    :is(#products, #popular-products, #all-products) .store-product-actions form {
+        width: 100%;
+        margin: 0 !important;
+    }
+
+    :is(#products, #popular-products, #all-products) .store-product-actions .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 42px;
+        margin: 0 !important;
+    }
+
+/* Swiper içindeki kartları eşit yükseklikte tut */
+#popular-products .swiper-wrapper {
+    align-items: stretch;
+}
+
+#popular-products .popular-product-slide {
+    display: flex;
+    height: auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#popular-products .store-product-card {
+    flex: 1;
+    box-sizing: border-box;
+}
+
+#popular-products .store-product-sales {
+    align-self: flex-start;
+    margin-bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: #fff5d9;
+    color: #795b13;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Kart gölgelerine alan bırak */
+#popular-products .products-carousel {
+    padding-block: 8px 20px;
+}
+
+    /* Swiper yüklenmediğinde de kaydırma çubuğunu gizle */
+    #popular-products .products-carousel .swiper-wrapper {
+        scrollbar-width: none;
+    }
+
+        #popular-products .products-carousel .swiper-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+#popular-products .swiper-button-disabled {
+    opacity: 0.4;
+    cursor: default;
+}
