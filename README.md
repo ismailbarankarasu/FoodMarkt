@@ -25,6 +25,22 @@ Kullanıcılar ana sayfada aktif kategorileri, güncel ürünleri, kampanyaları
 
 Ana sayfadaki gezinme bağlantıları `#categories`, `#products`, `#discounts`, `#popular-products` ve `#contact` bölümlerine yönelir. Ürün sayfalarından aynı bağlantılar ana sayfaya dönerek ilgili bölüme ulaşır.
 
+### Ana Sayfa
+
+![FoodMart ana sayfa](docs/screenshots/home.png)
+
+### Tüm Ürünler
+
+![Ürün listesi](docs/screenshots/products.png)
+
+### Ürün Detayı
+
+![Ürün detay sayfası](docs/screenshots/product-detail.png)
+
+### Güncel Kampanyalar
+
+![Güncel kampanyalar](docs/screenshots/campaigns.png)
+
 ## 🛒 Sepet
 
 Ürün kartlarından ve ürün detayından **Sepete Ekle** düğmesiyle ürün eklenebilir. Header'daki sepet bağlantısı ürün adedini ve toplam tutarı gösterir. `/Cart` ekranında adet güncellenebilir, ürün çıkarılabilir veya sepet temizlenebilir.
@@ -48,9 +64,19 @@ Oturum 24 saat hareketsizlikte sona erer. Mevcut tek sunucu kurulumunda bellek i
 
 Kategori, ürün, özellik, indirim ve satış kayıtları için oluşturma, güncelleme ve silme işlemleri bulunmaktadır. Silme işlemleri yalnızca korumalı POST istekleriyle yapılır.
 
+### Ürün Yönetimi
+
+![Admin ürün yönetimi](docs/screenshots/admin-products.png)
+
+### Abone Yönetimi
+
+![Admin abone yönetimi](docs/screenshots/admin-subscribers.png)
+
 ## 📊 Dashboard
 
 Dashboard; toplam ürün sayısını, toplam satışları, toplam geliri, abone sayısını, son 7 günün satış ve gelir grafiğini, kategori dağılımını, çok satan ürünleri ve son satış kayıtlarını gösterir.
+
+![Admin dashboard istatistikleri ve grafikleri](docs/screenshots/admin-dashboard.png)
 
 ## 🔐 Güvenlik
 
@@ -93,10 +119,6 @@ wwwroot           CSS, JavaScript, tema ve yüklenen görseller
 Verification      Entegrasyon ve istemci doğrulama araçları
 ```
 
-## 🖼️ Görseller
-
-Ekran görüntüleri proje tesliminde `docs/screenshots/` klasörüne eklenebilir. Bu depoda henüz ekran görüntüsü bulunmadığı için uydurma görsel kullanılmamıştır.
-
 ## ⚙️ Kurulum
 
 Gereksinimler:
@@ -137,6 +159,8 @@ Verification projesi geçici bir MongoDB veritabanı oluşturur ve kimlik doğru
 ## 📧 MailKit
 
 Abonelik formu önce benzersiz indirim kodu oluşturur, ardından MailKit ile SMTP üzerinden kullanıcıya gönderir. SMTP ayarları eksik veya gönderim başarısızsa işlem hata olarak ele alınır ve oluşturulan abone kaydı temizlenir. Başarılı akışta kod 30 gün geçerlidir.
+
+![MailKit ile gönderilen indirim kodu e-postası](docs/screenshots/discount-email.png)
 
 ## 📁 Görsel Yükleme
 
